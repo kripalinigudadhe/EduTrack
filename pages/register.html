@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduTrack • Register</title>
+  <link rel="stylesheet" href="/public/styles.css">
+  <script type="module">
+    import { attachRegister } from '/public/form.js';
+    window.addEventListener('DOMContentLoaded', attachRegister);
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="logo-emoji">🎓</span>
+        <span>EduTrack</span>
+      </div>
+     <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="/scores" class="nav-link">Scores</a></li>
+                <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="goals.html" class="nav-link">Goals</a></li>
+                <li class="nav-item"><a href="reports.html" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+
+            </ul>
+    </div>
+  </nav>
+
+  <div class="center">
+    <div class="card">
+      <h1>Create your account</h1>
+      <p class="sub">Join EduTrack and get personalized recommendations.</p>
+
+      <div id="registerAlert" class="alert"></div>
+
+      <form id="registerForm" class="form-grid">
+        <div class="full">
+          <label for="full_name">Full Name</label>
+          <input type="text" name="full_name" id="full_name" placeholder="A. P. Student" required>
+        </div>
+
+        <div>
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" placeholder="you@college.edu" required>
+        </div>
+        <div>
+          <label for="phone">Phone (optional)</label>
+          <input type="tel" name="phone" id="phone" placeholder="+91 98765 43210">
+        </div>
+
+        <div>
+          <label for="course">Course</label>
+          <input type="text" name="course" id="course" placeholder="B.Tech CSE" required>
+        </div>
+        <div>
+          <label for="semester">Semester</label>
+          <select name="semester" id="semester" required>
+            <option value="">Select…</option>
+            <option>I</option><option>II</option><option>III</option><option>IV</option>
+            <option>V</option><option>VI</option><option>VII</option><option>VIII</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" placeholder="Min 6 chars, include a number" required>
+        </div>
+
+        <div class="row full">
+          <button class="btn" type="submit">Create account</button>
+          <a class="btn secondary" href="/login">I already have an account</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer-space"></div>
+</body>
+</html>

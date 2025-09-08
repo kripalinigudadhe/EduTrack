@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goals - Academic Assistant</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .action-btns button {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EduTrack</span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="scores.html" class="nav-link">Scores</a></li>
+        <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+        <li class="nav-item"><a href="goals.html" class="nav-link active">Goals</a></li>
+        <li class="nav-item"><a href="reports.html" class="nav-link">Reports</a></li>
+        <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Academic Goals</h1>
+      <p>Set, track, and achieve your academic objectives</p>
+    </div>
+    <div class="hero-image">
+      <div class="hero-graphic"><i class="fas fa-graduation-cap"></i></div>
+    </div>
+  </section>
+
+  <!-- Goals Content -->
+  <section class="goals-content">
+    <div class="container">
+
+      <!-- Add New Goal -->
+      <div class="add-goal-card">
+        <div class="card-header">
+          <h3>Create New Goal</h3>
+          <button class="toggle-form-btn" id="toggleGoalForm"><i class="fas fa-plus"></i></button>
+        </div>
+        <div class="card-content" id="goalForm" style="display: none;">
+          <form id="addGoalForm" class="goal-form">
+            <input type="hidden" id="editIndex">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="goalTitle">Goal Title</label>
+                <input type="text" id="goalTitle" required>
+              </div>
+              <div class="form-group">
+                <label for="goalCategory">Category</label>
+                <select id="goalCategory" required>
+                  <option value="">Select Category</option>
+                  <option value="grade">Grade Improvement</option>
+                  <option value="skill">Skill Development</option>
+                  <option value="habit">Study Habits</option>
+                  <option value="exam">Exam Performance</option>
+                  <option value="project">Project Completion</option>
+                  <option value="attendance">Attendance</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="goalSubject">Subject (Optional)</label>
+                <input type="text" id="goalSubject">
+              </div>
+              <div class="form-group">
+                <label for="targetValue">Target Value</label>
+                <input type="text" id="targetValue" required>
+              </div>
+              <div class="form-group">
+                <label for="deadline">Deadline</label>
+                <input type="date" id="deadline" required>
+              </div>
+              <div class="form-group">
+                <label for="priority">Priority</label>
+                <select id="priority" required>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label for="goalDescription">Description</label>
+                <textarea id="goalDescription" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Goal</button>
+              <button type="button" class="btn btn-secondary" id="clearGoalForm"><i class="fas fa-undo"></i> Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Goals Table -->
+      <div class="goals-table">
+        <h3>Your Goals</h3>
+        <table id="goalsTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Subject</th>
+              <th>Target</th>
+              <th>Deadline</th>
+              <th>Priority</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+<!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Academic Assistant</span>
+                    </div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/scores">Scores</a></li>
+                        <li><a href="/analytics">Analytics</a></li>
+                        <li><a href="/goals">Goals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/public/server.js"></script>
+</body>
+</html>
+
+
+  <!-- JavaScript -->
+  <script>
+    const form = document.getElementById("addGoalForm");
+    const tableBody = document.querySelector("#goalsTable tbody");
+    const editIndexInput = document.getElementById("editIndex");
+
+    // Load goals from localStorage
+    function loadGoals() {
+      tableBody.innerHTML = "";
+      const goals = JSON.parse(localStorage.getItem("goals")) || [];
+      goals.forEach((goal, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${goal.title}</td>
+          <td>${goal.category}</td>
+          <td>${goal.subject || "-"}</td>
+          <td>${goal.target}</td>
+          <td>${goal.deadline}</td>
+          <td>${goal.priority}</td>
+          <td>${goal.description || "-"}</td>
+          <td class="action-btns">
+            <button onclick="editGoal(${index})">Edit</button>
+            <button onclick="deleteGoal(${index})">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Save goal
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const goals = JSON.parse(localStorage.getItem("goals")) || [];
+      const goal = {
+        title: document.getElementById("goalTitle").value,
+        category: document.getElementById("goalCategory").value,
+        subject: document.getElementById("goalSubject").value,
+        target: document.getElementById("targetValue").value,
+        deadline: document.getElementById("deadline").value,
+        priority: document.getElementById("priority").value,
+        description: document.getElementById("goalDescription").value
+      };
+
+      if (editIndexInput.value) {
+        goals[editIndexInput.value] = goal;
+        editIndexInput.value = "";
+      } else {
+        goals.push(goal);
+      }
+
+      localStorage.setItem("goals", JSON.stringify(goals));
+      form.reset();
+      document.getElementById("goalForm").style.display = "none";
+      loadGoals();
+    });
+
+    // Edit goal
+    window.editGoal = function(index) {
+      const goals = JSON.parse(localStorage.getItem("goals")) || [];
+      const g = goals[index];
+      document.getElementById("goalTitle").value = g.title;
+      document.getElementById("goalCategory").value = g.category;
+      document.getElementById("goalSubject").value = g.subject;
+      document.getElementById("targetValue").value = g.target;
+      document.getElementById("deadline").value = g.deadline;
+      document.getElementById("priority").value = g.priority;
+      document.getElementById("goalDescription").value = g.description;
+      editIndexInput.value = index;
+      document.getElementById("goalForm").style.display = "block";
+    }
+
+    // Delete goal
+    window.deleteGoal = function(index) {
+      const goals = JSON.parse(localStorage.getItem("goals")) || [];
+      goals.splice(index, 1);
+      localStorage.setItem("goals", JSON.stringify(goals));
+      loadGoals();
+    }
+
+    // Toggle Goal Form
+    document.getElementById("toggleGoalForm").addEventListener("click", () => {
+      const form = document.getElementById("goalForm");
+      form.style.display = form.style.display === "none" ? "block" : "none";
+    });
+
+    // Clear Goal Form
+    document.getElementById("clearGoalForm").addEventListener("click", () => {
+      form.reset();
+      editIndexInput.value = "";
+    });
+
+    // Initial load
+    loadGoals();
+  </script>
+</body>
+</html>

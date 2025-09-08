@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #333;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1e293b;
+    }
+    .feedback-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 7px 10px -2px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    h2 {
+      margin-bottom: 15px;
+      color: #4c188b;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    th, td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #f8fafc;
+      font-weight: 600;
+      border-color: #6e2fba;
+      color: #4c188b;
+    }
+    select, input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: #7e3fca;
+      box-shadow: 0 0 0 3px rgba(126, 63, 202, 0.2);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    .btn {
+      background: linear-gradient(135deg, #972be3 0%, #7c0f6c 100%);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      background: linear-gradient(135deg, #a56cdb 0%, #8f1c99 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+    }
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      margin: 10px 0;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EduTrack</span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="progress.html" class="nav-link">Progress</a></li>
+        <li class="nav-item"><a href="study_resources.html" class="nav-link">Resources</a></li>
+        <li class="nav-item"><a href="motivation.html" class="nav-link">Motivation</a></li>
+        <li class="nav-item"><a href="time_manager.html" class="nav-link">Time manager</a></li>
+        <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Feedback Portal</h1>
+      <p>Submit feedback easily — Students about Teachers and Teachers about Students.</p>
+    </div>
+    <div class="hero-image">
+      <div class="hero-graphic">
+        <i class="fas fa-comments"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Student → Teacher Feedback -->
+  <div class="feedback-container">
+    <h2>Student → Teacher Feedback</h2>
+    <table id="studentFeedbackTable">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Subject</th>
+          <th>Teacher</th>
+          <th>Rating</th>
+          <th>Remarks</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="actions">
+      <button class="btn" onclick="addStudentRow()">+ Add Feedback</button>
+    </div>
+  </div>
+
+  <!-- Teacher → Student Feedback -->
+  <div class="feedback-container">
+    <h2>Teacher → Student Feedback</h2>
+    <table id="teacherFeedbackTable">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Student</th>
+          <th>Class</th>
+          <th>Performance</th>
+          <th>Remarks</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="actions">
+      <button class="btn" onclick="addTeacherRow()">+ Add Feedback</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>EduTrack</span>
+          </div>
+          <p>Empowering students to achieve academic excellence with top resources and tools.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="progress.html">Progress</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="goals.html">Goals</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect With Us</h4>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 EduTrack. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const studentTbody = document.querySelector("#studentFeedbackTable tbody");
+    const teacherTbody = document.querySelector("#teacherFeedbackTable tbody");
+
+    // Student → Teacher Feedback
+    function addStudentRow() {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>New</td>
+        <td><input type="text" placeholder="Subject"></td>
+        <td><input type="text" placeholder="Teacher"></td>
+        <td>
+          <select>
+            <option value="">Select</option>
+            <option>Excellent</option>
+            <option>Good</option>
+            <option>Average</option>
+            <option>Poor</option>
+          </select>
+        </td>
+        <td><textarea placeholder="Remarks..."></textarea></td>
+        <td>
+          <button class="btn" onclick="saveStudentFeedback(this)">Save</button>
+          <button class="btn" onclick="this.closest('tr').remove()">Cancel</button>
+        </td>
+      `;
+      studentTbody.appendChild(row);
+    }
+
+    function saveStudentFeedback(btn) {
+      const row = btn.closest("tr");
+      const inputs = row.querySelectorAll("input, select, textarea");
+      const subject = inputs[0].value;
+      const teacher = inputs[1].value;
+      const rating = inputs[2].value;
+      const remarks = inputs[3].value;
+
+      row.innerHTML = `
+        <td>${studentTbody.children.length}</td>
+        <td>${subject}</td>
+        <td>${teacher}</td>
+        <td>${rating}</td>
+        <td>${remarks}</td>
+        <td>
+          <button class="btn" onclick="this.closest('tr').remove()">Delete</button>
+        </td>
+      `;
+    }
+
+    // Teacher → Student Feedback
+    function addTeacherRow() {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>New</td>
+        <td><input type="text" placeholder="Student"></td>
+        <td><input type="text" placeholder="Class"></td>
+        <td>
+          <select>
+            <option value="">Select</option>
+            <option>Excellent</option>
+            <option>Good</option>
+            <option>Needs Improvement</option>
+          </select>
+        </td>
+        <td><textarea placeholder="Remarks..."></textarea></td>
+        <td>
+          <button class="btn" onclick="saveTeacherFeedback(this)">Save</button>
+          <button class="btn" onclick="this.closest('tr').remove()">Cancel</button>
+        </td>
+      `;
+      teacherTbody.appendChild(row);
+    }
+
+    function saveTeacherFeedback(btn) {
+      const row = btn.closest("tr");
+      const inputs = row.querySelectorAll("input, select, textarea");
+      const student = inputs[0].value;
+      const className = inputs[1].value;
+      const performance = inputs[2].value;
+      const remarks = inputs[3].value;
+
+      row.innerHTML = `
+        <td>${teacherTbody.children.length}</td>
+        <td>${student}</td>
+        <td>${className}</td>
+        <td>${performance}</td>
+        <td>${remarks}</td>
+        <td>
+          <button class="btn" onclick="this.closest('tr').remove()">Delete</button>
+        </td>
+      `;
+    }
+  </script>
+</body>
+</html>

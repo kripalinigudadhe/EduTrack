@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracking - EduTrack</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Page-specific styles using your theme */
+        .progress-container {
+            max-width: 1100px;
+            margin: 100px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-container h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #4b0082;
+            margin-bottom: 20px;
+        }
+
+        .progress-container p {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        form.progress-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .btn-submit {
+            background: #6c2eb9;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: #5a2296;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            .progress-container {
+                margin: 50px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+       <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="/" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="scores.html" class="nav-link">Scores</a></li>
+                <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="goals.html" class="nav-link">Goals</a></li>
+                <li class="nav-item"><a href="reports.html" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Progress Tracking Form -->
+    <section class="progress-container">
+        <h1>Track Your Weekly Progress</h1>
+        <p>Fill in your weekly academic details and monitor your performance over time.</p>
+
+        <form class="progress-form" id="progressForm">
+            <div class="form-group">
+                <label for="studentName">Student Name</label>
+                <input type="text" id="studentName" name="student_name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="weekNumber">Week Number</label>
+                <input type="number" id="weekNumber" name="week_number" min="1" placeholder="Enter week number" required>
+            </div>
+            <div class="form-group">
+                <label for="studyHours">Study Hours</label>
+                <input type="number" id="studyHours" name="study_hours" min="1" placeholder="Enter study hours" required>
+            </div>
+            <div class="form-group">
+                <label for="assignments">Assignments Completed</label>
+                <input type="number" id="assignments" name="assignments_completed" min="0" placeholder="Enter assignments completed" required>
+            </div>
+            <div class="form-group">
+                <label for="attendance">Attendance Percentage</label>
+                <input type="number" id="attendance" name="attendance_percentage" min="0" max="100" placeholder="Enter attendance %" required>
+            </div>
+            <button type="submit" class="btn-submit">Submit Progress</button>
+        </form>
+
+       
+
+<script>
+document.getElementById('progressForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const studentName = document.getElementById('studentName').value;
+    const week = document.getElementById('weekNumber').value;
+    const studyHours = document.getElementById('studyHours').value;
+    const assignmentsCompleted = document.getElementById('assignments').value;
+    const attendancePercentage = document.getElementById('attendance').value;
+
+    // Build data object
+    const progressData = {
+        studentName,
+        week,
+        studyHours,
+        assignmentsCompleted,
+        attendancePercentage
+    };
+
+    try {
+        // Load existing data
+        let stored = JSON.parse(localStorage.getItem('progressData')) || [];
+        stored.push(progressData);
+
+        // Save back
+        localStorage.setItem('progressData', JSON.stringify(stored));
+
+        alert('Progress saved locally!');
+        document.getElementById('progressForm').reset();
+    } catch (err) {
+        alert('An error occurred while saving your data.');
+        console.error(err);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduTrack — Student Weekly Data</title>
+  <link rel="stylesheet" href="/public/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+     <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="/scores" class="nav-link">Scores</a></li>
+                <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="goals.html" class="nav-link">Goals</a></li>
+                <li class="nav-item"><a href="reports.html" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="page-header">
+    <h1>Student Weekly Data</h1>
+    <p>Fill the weekly data and visualize it instantly. It stores locally & optional server sync.</p>
+    </header>
+    <div class="container scores-content">
+    <div class="dashboard-grid">
+      <section class="dashboard-card score-form-card">
+        <div class="card-header">
+          <h3>Enter Weekly Data</h3>
+        </div>
+        <form id="entryForm" class="score-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Week No.</label>
+              <input type="text" id="studentName" required placeholder="" />
+            </div>
+
+            <div class="form-group">
+              <label>Week Starting</label>
+              <input type="date" id="weekStart" required />
+            </div>
+
+            <div class="form-group">
+              <label>Attendance (%)</label>
+              <input type="number" id="attendance" min="0" max="100" value="100" required />
+            </div>
+
+            <div class="form-group">
+              <label>Homework (0-100)</label>
+              <input type="number" id="homework" min="0" max="100" value="80" required />
+            </div>
+
+            <div class="form-group">
+              <label>Quiz (0-100)</label>
+              <input type="number" id="quiz" min="0" max="100" value="75" required />
+            </div>
+
+            <div class="form-group">
+              <label>Participation (0-100)</label>
+              <input type="number" id="participation" min="0" max="100" value="70" required />
+            </div>
+
+            <div class="form-group">
+              <label>Subject</label>
+              <select id="subject">
+                <option>Math</option>
+                <option>Science</option>
+                <option>English</option>
+                <option>History</option>
+                <option>Computer</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Comments</label>
+              <textarea id="comments" rows="3" placeholder="Optional notes"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Entry</button>
+            <button type="button" id="exportJSON" class="btn btn-outline">Export JSON</button>
+            <button type="button" id="clearAll" class="btn btn-secondary">Clear All Local</button>
+            <button type="button" id="syncServer" class="btn btn-outline">Sync to Server</button>
+          </div>
+        </form>
+        <div id="status" class="muted"></div>
+      </section>
+
+      <aside class="dashboard-card">
+        <div class="card-header">
+          <h3>Weekly Overview</h3>
+        </div>
+        <div class="card-content">
+          <canvas id="chart" height="260"></canvas>
+          <p class="muted">Chart shows average composite score per week.</p>
+        </div>
+      </aside>
+    </div>
+
+    <section class="scores-table-card" style="margin-top:2rem">
+      <div class="card-header">
+        <h3>Saved Entries</h3>
+      </div>
+      <div class="table-container">
+        <table id="entriesTable" class="scores-table">
+          <thead><tr><th>Week No.</th><th>Week</th><th>Subject</th><th>Avg</th><th>Action</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+// ----------------- IndexedDB helper -----------------
+const DB_NAME = 'eduTrackDB';
+const DB_STORE = 'weeklyEntries';
+let db;
+
+function openDb(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = e => {
+      const idb = e.target.result;
+      if(!idb.objectStoreNames.contains(DB_STORE)){
+        const store = idb.createObjectStore(DB_STORE, { keyPath: 'id', autoIncrement: true });
+        store.createIndex('student', 'studentName', { unique:false });
+        store.createIndex('week', 'weekStart', { unique:false });
+      }
+    }
+    req.onsuccess = e => { db = e.target.result; resolve(db); }
+    req.onerror = e => reject(e.target.error)
+  })
+}
+
+function addEntry(entry){
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(DB_STORE,'readwrite');
+    const store = tx.objectStore(DB_STORE);
+    store.add(entry);
+    tx.oncomplete = ()=>resolve();
+    tx.onerror = e=>reject(e.target.error);
+  })
+}
+
+function getAllEntries(){
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(DB_STORE,'readonly');
+    const store = tx.objectStore(DB_STORE);
+    const req = store.getAll();
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = e=>reject(e.target.error);
+  })
+}
+
+function deleteEntry(id){
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(DB_STORE,'readwrite');
+    const store = tx.objectStore(DB_STORE);
+    const req = store.delete(id);
+    req.onsuccess = ()=>resolve();
+    req.onerror = e=>reject(e.target.error);
+  })
+}
+
+function clearAll(){
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(DB_STORE,'readwrite');
+    const store = tx.objectStore(DB_STORE);
+    const req = store.clear();
+    req.onsuccess = ()=>resolve();
+    req.onerror = e=>reject(e.target.error);
+  })
+}
+
+// --------------- UI + business logic ----------------
+const form = document.getElementById('entryForm');
+const status = document.getElementById('status');
+const tableBody = document.querySelector('#entriesTable tbody');
+let chart;
+
+function compositeScore(e){
+  return Math.round((e.attendance*0.15 + e.homework*0.35 + e.quiz*0.35 + e.participation*0.15));
+}
+
+function fmtDate(d){
+  const dt = new Date(d);
+  return dt.toISOString().slice(0,10);
+}
+
+form.addEventListener('submit', async (ev)=>{
+  ev.preventDefault();
+  const entry = {
+    studentName: document.getElementById('studentName').value.trim(),
+    weekStart: document.getElementById('weekStart').value,
+    attendance: Number(document.getElementById('attendance').value),
+    homework: Number(document.getElementById('homework').value),
+    quiz: Number(document.getElementById('quiz').value),
+    participation: Number(document.getElementById('participation').value),
+    subject: document.getElementById('subject').value,
+    comments: document.getElementById('comments').value.trim(),
+    createdAt: new Date().toISOString()
+  };
+  entry.avg = compositeScore(entry);
+  await addEntry(entry);
+  status.textContent = 'Saved locally ✓';
+  setTimeout(()=>status.textContent='',1500);
+  form.reset();
+  document.getElementById('attendance').value = 100;
+  document.getElementById('homework').value = 80;
+  document.getElementById('quiz').value = 75;
+  document.getElementById('participation').value = 70;
+  refreshUI();
+});
+
+async function refreshUI(){
+  const entries = await getAllEntries();
+  tableBody.innerHTML = '';
+  entries.sort((a,b)=> new Date(a.weekStart) - new Date(b.weekStart));
+  entries.forEach(e=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${e.studentName}</td>
+      <td>${fmtDate(e.weekStart)}</td>
+      <td>${e.subject}</td>
+      <td>${e.avg}</td>
+      <td><button data-id="${e.id}" class="btn btn-danger btn-sm">Delete</button></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+
+  // attach delete handlers
+  tableBody.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = Number(btn.dataset.id);
+      await deleteEntry(id);
+      refreshUI();
+    })
+  });
+
+  // chart data
+  const grouped = {};
+  entries.forEach(e=>{
+    const key = fmtDate(e.weekStart);
+    if(!grouped[key]) grouped[key] = {count:0,sum:0};
+    grouped[key].count++;
+    grouped[key].sum += e.avg;
+  })
+  const labels = Object.keys(grouped).sort();
+  const data = labels.map(l=> Math.round(grouped[l].sum / grouped[l].count));
+  updateChart(labels,data);
+}
+
+function updateChart(labels,data){
+  if(!chart){
+    const ctx = document.getElementById('chart').getContext('2d');
+    chart = new Chart(ctx, {
+      type: 'line',
+      data: { labels, datasets: [{ label: 'Avg composite score', data, tension:0.3, fill:true }] },
+      options: { responsive:true, scales:{ y:{ beginAtZero:true, max:100 } } }
+    });
+  } else {
+    chart.data.labels = labels;
+    chart.data.datasets[0].data = data;
+    chart.update();
+  }
+}
+
+// export JSON
+document.getElementById('exportJSON').addEventListener('click', async ()=>{
+  const entries = await getAllEntries();
+  const blob = new Blob([JSON.stringify(entries, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'eduTrack_entries.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// clear all
+document.getElementById('clearAll').addEventListener('click', async ()=>{
+  if(confirm('Delete all local entries?')){
+    await clearAll(); refreshUI();
+  }
+});
+
+// sync to server
+document.getElementById('syncServer').addEventListener('click', async ()=>{
+  const entries = await getAllEntries();
+  if(entries.length === 0){ alert('No entries to sync'); return; }
+  try{
+    const res = await fetch('/api/entries', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(entries) });
+    if(res.ok){ alert('Synced to server successfully'); } else { alert('Server responded with ' + res.status); }
+  } catch(err){ alert('Sync failed: ' + err.message); }
+});
+
+// open DB
+openDb().then(()=>refreshUI()).catch(err=>console.error('DB err',err));
+</script>
+
+</body>
+</html>

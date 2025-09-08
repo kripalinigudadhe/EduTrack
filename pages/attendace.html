@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Tracker</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #333;
+    margin: 0;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1e293b;
+  }
+  .attendance-container {
+    max-width: 1000px;
+    margin: 50px auto 60px auto;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 7px 10px -2px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+  }
+  th, td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    text-align: center;
+    vertical-align: middle;
+  }
+  th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    border-color: #6e2fba;
+    color: #4c188b;
+  }
+  .present {
+    color: green;
+    font-weight: bold;
+  }
+  .absent {
+    color: red;
+    font-weight: bold;
+  }
+  .btn {
+    background: linear-gradient(135deg, #972be3 0%, #7c0f6c 100%);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin: 5px;
+  }
+  .btn:hover {
+    background: linear-gradient(135deg, #a56cdb 0%, #8f1c99 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+  }
+  select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+</style>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EduTrack</span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="progress.html" class="nav-link">Progress</a></li>
+        <li class="nav-item"><a href="study_resources.html" class="nav-link">Resources</a></li>
+        <li class="nav-item"><a href="motivation.html" class="nav-link">Motivation</a></li>
+        <li class="nav-item"><a href="attendance.html" class="nav-link active">Attendance</a></li>
+        <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Attendance Tracker</h1>
+      <p>Mark your attendance for each subject and save it.</p>
+    </div>
+    <div class="hero-image">
+      <div class="hero-graphic">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Attendance Table -->
+  <div class="attendance-container">
+    <table id="attendanceTable">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Maths</th>
+          <th>Physics</th>
+          <th>Chemistry</th>
+          <th>Biology</th>
+          <th>English</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Monday</td><td></td><td></td><td></td><td></td><td></td><td><button class="btn" onclick="saveRow(this)">Save</button></td></tr>
+        <tr><td>Tuesday</td><td></td><td></td><td></td><td></td><td></td><td><button class="btn" onclick="saveRow(this)">Save</button></td></tr>
+        <tr><td>Wednesday</td><td></td><td></td><td></td><td></td><td></td><td><button class="btn" onclick="saveRow(this)">Save</button></td></tr>
+        <tr><td>Thursday</td><td></td><td></td><td></td><td></td><td></td><td><button class="btn" onclick="saveRow(this)">Save</button></td></tr>
+        <tr><td>Friday</td><td></td><td></td><td></td><td></td><td></td><td><button class="btn" onclick="saveRow(this)">Save</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>EduTrack</span>
+          </div>
+          <p>Empowering students to achieve academic excellence with top resources and tools.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="progress.html">Progress</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="goals.html">Goals</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect With Us</h4>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 EduTrack. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Insert dropdowns for attendance
+    window.onload = () => {
+      const rows = document.querySelectorAll("#attendanceTable tbody tr");
+      rows.forEach(row => {
+        for (let i = 1; i < row.cells.length - 1; i++) {
+          row.cells[i].innerHTML = `
+            <select>
+              <option value="">--Select--</option>
+              <option value="Present">Present</option>
+              <option value="Absent">Absent</option>
+            </select>
+          `;
+        }
+      });
+    };
+
+    // Save attendance row
+    function saveRow(button) {
+      const row = button.closest("tr");
+      for (let i = 1; i < row.cells.length - 1; i++) {
+        const select = row.cells[i].querySelector("select");
+        if (select) {
+          const value = select.value;
+          row.cells[i].textContent = value;
+          row.cells[i].className = value === "Present" ? "present" : "absent";
+        }
+      }
+      button.disabled = true;
+      button.textContent = "Saved";
+    }
+  </script>
+</body>
+</html>

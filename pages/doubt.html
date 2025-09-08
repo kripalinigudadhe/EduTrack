@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doubt Forum</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #333;
+    margin: 0;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1e293b;
+  }
+  .doubt-container {
+    max-width: 1000px;
+    margin: 50px auto 60px auto;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 7px 10px -2px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+  }
+  th, td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    border-color: #6e2fba;
+    color: #4c188b;
+  }
+  select, textarea, input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    margin-bottom: 10px;
+  }
+  select:focus, textarea:focus {
+    outline: none;
+    border-color: #7e3fca;
+    box-shadow: 0 0 0 3px rgba(126, 63, 202, 0.2);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  .btn {
+    background: linear-gradient(135deg, #972be3 0%, #7c0f6c 100%);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .btn:hover {
+    background: linear-gradient(135deg, #a56cdb 0%, #8f1c99 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+  }
+</style>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EduTrack</span>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="progress.html" class="nav-link">Progress</a></li>
+        <li class="nav-item"><a href="study_resources.html" class="nav-link">Resources</a></li>
+        <li class="nav-item"><a href="motivation.html" class="nav-link">Motivation</a></li>
+        <li class="nav-item"><a href="time_manager.html" class="nav-link">Time Manager</a></li>
+        <li class="nav-item"><a href="doubt.html" class="nav-link active">Doubt Forum</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Doubt Session</h1>
+      <p>Ask your academic doubts, select the subject and chapter, and track their resolution.</p>
+    </div>
+  </section>
+
+  <div class="doubt-container">
+    <h2>Ask Your Doubt</h2>
+    <form id="doubtForm">
+      <label>Subject</label>
+      <select id="subject" required onchange="loadChapters()">
+        <option value="">Select Subject</option>
+        <option value="Math">Mathematics</option>
+        <option value="Science">Science</option>
+        <option value="English">English</option>
+        <option value="History">History</option>
+      </select>
+
+      <label>Chapter / Concept</label>
+      <select id="chapter" required>
+        <option value="">Select Chapter</option>
+      </select>
+
+      <label>Your Doubt</label>
+      <textarea id="doubtText" placeholder="Write your doubt here..." required></textarea>
+
+      <button type="submit" class="btn">Submit Doubt</button>
+    </form>
+
+    <h2 style="margin-top:30px;">Submitted Doubts</h2>
+    <table id="doubtTable">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Subject</th>
+          <th>Chapter</th>
+          <th>Doubt</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>EduTrack</span>
+          </div>
+          <p>Empowering students to achieve academic excellence with top resources and tools.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="progress.html">Progress</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="goals.html">Goals</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect With Us</h4>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 EduTrack. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  const chaptersData = {
+    "Math": ["Algebra", "Geometry", "Trigonometry", "Calculus"],
+    "Science": ["Physics - Motion", "Chemistry - Reactions", "Biology - Cells"],
+    "English": ["Grammar", "Comprehension", "Writing Skills"],
+    "History": ["Ancient History", "Medieval History", "Modern History"]
+  };
+
+  function loadChapters() {
+    const subject = document.getElementById("subject").value;
+    const chapterSelect = document.getElementById("chapter");
+    chapterSelect.innerHTML = "<option value=''>Select Chapter</option>";
+    if (chaptersData[subject]) {
+      chaptersData[subject].forEach(ch => {
+        const opt = document.createElement("option");
+        opt.value = ch;
+        opt.textContent = ch;
+        chapterSelect.appendChild(opt);
+      });
+    }
+  }
+
+  const doubtForm = document.getElementById("doubtForm");
+  const doubtTable = document.querySelector("#doubtTable tbody");
+  let doubtCount = 0;
+
+  doubtForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const subject = document.getElementById("subject").value;
+    const chapter = document.getElementById("chapter").value;
+    const doubtText = document.getElementById("doubtText").value;
+
+    doubtCount++;
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${doubtCount}</td>
+      <td>${subject}</td>
+      <td>${chapter}</td>
+      <td>${doubtText}</td>
+      <td><span style="color:#d97706;font-weight:600;">Pending</span></td>
+    `;
+    doubtTable.appendChild(row);
+
+    doubtForm.reset();
+    document.getElementById("chapter").innerHTML = "<option value=''>Select Chapter</option>";
+  });
+</script>
+</body>
+</html>

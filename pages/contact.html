@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - EduTrack</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .contact-container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 7px 10px -2px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    .contact-form {
+      display: grid;
+      gap: 15px;
+    }
+    .contact-form label {
+      font-weight: 600;
+      color: var(--primary, #4c188b);
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--accent, #7e3fca);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(126, 63, 202, 0.2);
+    }
+    .btn-submit {
+      background: linear-gradient(135deg, #972be3 0%, #7c0f6c 100%);
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .btn-submit:hover {
+      background: linear-gradient(135deg, #a56cdb 0%, #8f1c99 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+    }
+    .success-message,
+    .error-message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      display: none;
+    }
+    .success-message { background: #ecfdf5; color: #065f46; }
+    .error-message { background: #fef2f2; color: #b91c1c; }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EduTrack</span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="progress.html" class="nav-link">Progress</a></li>
+        <li class="nav-item"><a href="study_resources.html" class="nav-link">Resources</a></li>
+        <li class="nav-item"><a href="motivation.html" class="nav-link">Motivation</a></li>
+        <li class="nav-item"><a href="time_manager.html" class="nav-link">Time Manager</a></li>
+        <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>We’d love to hear from you! Share your queries, feedback, or suggestions.</p>
+    </div>
+    <div class="hero-image">
+      <div class="hero-graphic">
+        <i class="fas fa-envelope-open-text"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form -->
+  <div class="contact-container">
+    <form id="contactForm" class="contact-form">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" placeholder="Write your message..." required></textarea>
+
+      <button type="submit" class="btn-submit">Send Message</button>
+      <div class="success-message" id="successMessage">✅ Your message has been sent successfully!</div>
+      <div class="error-message" id="errorMessage">✅ Your message has been sent successfully!</div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+        <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Want to give feedback?</h2>
+                <p>The Feedback section allows teachers to share constructive insights about students and vice versa performance in different subjects. Your feedback helps students understand their strengths, identify areas for improvement, and build better learning strategies. Please provide honest and supportive feedback to guide academic growth.</p>
+                <a href="feedback.html" class="btn btn-primary">Feedback</a>
+            </div>
+        </div>
+    </section>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>EduTrack</span>
+          </div>
+
+          <p>Empowering students to achieve academic excellence with top resources and tools.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="progress.html">Progress</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="goals.html">Goals</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect With Us</h4>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+       </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+  <!-- Contact JS -->
+ <script>
+const form = document.getElementById("contactForm");
+const successMsg = document.getElementById("successMessage");
+const errorMsg = document.getElementById("errorMessage");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  successMsg.style.display = "none";
+  errorMsg.style.display = "none";
+
+  const data = {
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    message: document.getElementById("message").value.trim()
+  };
+
+  try {
+    const response = await fetch("/api/contact", {   // ✅ FIXED ENDPOINT
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      successMsg.style.display = "block";
+      form.reset();
+    } else {
+      errorMsg.innerText = result.message || "❌ Failed to send message.";
+      errorMsg.style.display = "block";
+    }
+  } catch (err) {
+    errorMsg.style.display = "block";
+  }
+});
+</script>
+</body>
+</html>

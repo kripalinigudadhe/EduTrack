@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Academic Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="scores.html" class="nav-link">Scores</a>
+                </li>
+                <li class="nav-item">
+                    <a href="analytics.html" class="nav-link">Analytics</a>
+                </li>
+                <li class="nav-item">
+                    <a href="goals.html" class="nav-link">Goals</a>
+                </li>
+                <li class="nav-item">
+                    <a href="reports.html" class="nav-link">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="container">
+            <div class="dashboard-welcome">
+                <h1>Welcome back!</h1>
+                <p>Here's your academic performance overview</p>
+            </div>
+            <div class="dashboard-date">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="current-date"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-content">
+        <div class="container">
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">85.5%</div>
+                        <div class="stat-label">Overall GPA</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> +2.3%
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Active Subjects</div>
+                        <div class="stat-change neutral">
+                            <i class="fas fa-minus"></i> 0%
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">24h</div>
+                        <div class="stat-label">Study Time This Week</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> +15%
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Goals Completed</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> +2
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Recent Performance Chart -->
+                <div class="dashboard-card chart-card">
+                    <div class="card-header">
+                        <h3>Recent Performance Trend</h3>
+                        <div class="card-actions">
+                            <select id="performance-period">
+                                <option value="week">Last Week</option>
+                                <option value="month">Last Month</option>
+                                <option value="semester">This Semester</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Subject Performance -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Subject Performance</h3>
+                        <a href="scores.html" class="view-all">View All</a>
+                    </div>
+                    <div class="card-content">
+                        <div class="subject-list">
+                            <div class="subject-item">
+                                <div class="subject-info">
+                                    <div class="subject-name">Mathematics</div>
+                                    <div class="subject-score">92%</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 92%"></div>
+                                </div>
+                            </div>
+                            <div class="subject-item">
+                                <div class="subject-info">
+                                    <div class="subject-name">Physics</div>
+                                    <div class="subject-score">88%</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            <div class="subject-item">
+                                <div class="subject-info">
+                                    <div class="subject-name">Chemistry</div>
+                                    <div class="subject-score">85%</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="subject-item">
+                                <div class="subject-info">
+                                    <div class="subject-name">English</div>
+                                    <div class="subject-score">78%</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 78%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Upcoming Events</h3>
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="event-list">
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <div class="event-day">15</div>
+                                    <div class="event-month">Dec</div>
+                                </div>
+                                <div class="event-info">
+                                    <div class="event-title">Mathematics Exam</div>
+                                    <div class="event-time">9:00 AM - 12:00 PM</div>
+                                </div>
+                            </div>
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <div class="event-day">18</div>
+                                    <div class="event-month">Dec</div>
+                                </div>
+                                <div class="event-info">
+                                    <div class="event-title">Physics Assignment Due</div>
+                                    <div class="event-time">11:59 PM</div>
+                                </div>
+                            </div>
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <div class="event-day">22</div>
+                                    <div class="event-month">Dec</div>
+                                </div>
+                                <div class="event-info">
+                                    <div class="event-title">Chemistry Lab Report</div>
+                                    <div class="event-time">2:00 PM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Recommendations -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>AI Recommendations</h3>
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="recommendation-list">
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="recommendation-text">
+                                    <strong>Focus on English:</strong> Your performance has dropped by 8% this month. Consider spending more time on grammar and essay writing.
+                                </div>
+                            </div>
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <div class="recommendation-text">
+                                    <strong>Study Strategy:</strong> Your best performance time is 7-9 PM. Schedule important study sessions during this window.
+                                </div>
+                            </div>
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="recommendation-text">
+                                    <strong>Strength:</strong> Excellent progress in Mathematics! Consider helping peers to reinforce your knowledge.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="action-buttons">
+                            <a href="scores.html" class="action-btn">
+                                <i class="fas fa-plus"></i>
+                                Add New Score
+                            </a>
+                            <a href="goals.html" class="action-btn">
+                                <i class="fas fa-bullseye"></i>
+                                Set New Goal
+                            </a>
+                            <a href="reports.html" class="action-btn">
+                                <i class="fas fa-file-download"></i>
+                                Generate Report
+                            </a>
+                            <a href="analytics.html" class="action-btn">
+                                <i class="fas fa-chart-bar"></i>
+                                View Analytics
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+     <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Want to know which and how many classes u attended?</h2>
+                <p>The Attendance Tracker helps students monitor their class participation throughout the week. By keeping a clear record of attended and missed lectures, students can stay consistent and identify areas where improvement is needed. Regular attendance ensures better academic performance and discipline.</p>
+                <a href="attendace.html" class="btn btn-primary">Attendance Data</a>
+            </div>
+        </div>
+    </section>
+<!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Academic Assistant</span>
+                    </div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="scores.html">Scores</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                        <li><a href="goals.html">Goals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

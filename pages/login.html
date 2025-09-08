@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduTrack • Login</title>
+  <link rel="stylesheet" href="/public/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+  <script type="module">
+    import { attachLogin } from '/public/form.js';
+    window.addEventListener('DOMContentLoaded', attachLogin);
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+      <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+        
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="/scores" class="nav-link">Scores</a></li>
+                <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="goals.html" class="nav-link">Goals</a></li>
+                <li class="nav-item"><a href="reports.html" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+
+            
+      <!-- ✅ Login Icon -->
+    <div class="nav-login">
+      <a href="login.html" class="nav-link">
+        <i class="fas fa-user" style="color:white; font-size:20px;"></i>
+      </a>
+    </div>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="center">
+    <div class="card">
+      <h1>Welcome back</h1>
+      <p class="sub">Login to continue your academic journey.</p>
+
+      <div id="loginAlert" class="alert"></div>
+
+      <form id="loginForm" class="form-grid">
+        <div class="full">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" placeholder="you@college.edu" required>
+        </div>
+        <div class="full">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" placeholder="••••••••" required>
+        </div>
+        <div class="row full">
+          <button class="btn" type="submit">Login</button>
+          <a class="btn secondary" href="/register">Create account</a>
+        </div>
+        <p class="note full">New here? Register to get personalized analytics, goals and reports.</p>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer-space"></div>
+</body>
+</html>

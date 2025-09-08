@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planner</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #333;
+    margin: 0;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1e293b;
+  }
+  .planner-container {
+    max-width: 1000px;
+    margin: 50px auto 60px auto;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 7px 10px -2px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+  }
+  th, td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    border-color: #6e2fba;
+    color: #4c188b ;
+  }
+  select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+  }
+  select:focus {
+    outline: none;
+    border-color: #7e3fca;
+    box-shadow: 0 0 0 3px rgba(126, 63, 202, 0.2);
+  }
+  .btn {
+    background: linear-gradient(135deg, #972be3 0%, #7c0f6c 100%);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .btn:hover {
+    background: linear-gradient(135deg, #a56cdb 0%, #8f1c99 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+  }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    gap: 10px;
+  }
+</style>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EduTrack</span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="dashboard" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="progress.html" class="nav-link">Progress</a></li>
+        <li class="nav-item"><a href="study_resources.html" class="nav-link">Resources</a></li>
+        <li class="nav-item"><a href="motivation.html" class="nav-link">Motivation</a></li>
+        <li class="nav-item"><a href="time_manager.html" class="nav-link active">Time Manager</a></li>
+        <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Study Planner</h1>
+      <p>
+        Plan your proper study schedule, tasks, set priorities, and achieve your goals effortlessly.
+      </p>
+    </div>
+  </section>
+
+  <div class="planner-container">
+    <table id="plannerTable">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Subject</th>
+          <th>Task</th>
+          <th>Category</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="actions">
+      <button class="btn" onclick="addRow()">+ Add Task</button>
+    </div>
+  </div>
+
+<!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Academic Assistant</span>
+                    </div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/scores">Scores</a></li>
+                        <li><a href="/analytics">Analytics</a></li>
+                        <li><a href="/goals">Goals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/public/server.js"></script>
+</body>
+</html>
+
+
+  <script>
+    const tbody = document.querySelector("#plannerTable tbody");
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "";
+      const d = new Date(dateStr);
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    // Fetch existing tasks
+    async function loadTasks() {
+      const res = await fetch('/api/planner');
+      const data = await res.json();
+      tbody.innerHTML = "";
+      if (data.ok) {
+        data.tasks.forEach((task, index) => renderRow(task, index + 1));
+      }
+    }
+
+    // Render saved task (only status editable)
+    function renderRow(task, index) {
+      const row = document.createElement("tr");
+      row.dataset.id = task.id;
+      row.innerHTML = `
+        <td>${index}</td>
+        <td>${formatDate(task.date)}</td>
+        <td>${task.time || ""}</td>
+        <td>${task.subject || ""}</td>
+        <td>${task.task || ""}</td>
+        <td>${task.category || ""}</td>
+        <td>${task.priority || ""}</td>
+        <td>
+          <select onchange="updateStatus(this)">
+            <option value="Pending" ${task.status==="Pending"?"selected":""}>Pending</option>
+            <option value="In Progress" ${task.status==="In Progress"?"selected":""}>In Progress</option>
+            <option value="Completed" ${task.status==="Completed"?"selected":""}>Completed</option>
+          </select>
+        </td>
+        <td>${task.notes || ""}</td>
+        <td>
+          <button class="btn" onclick="deleteTask(this)">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    // Add new task row (for creating new entry)
+    function addRow() {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>New</td>
+        <td><input type="date"></td>
+        <td><input type="time"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td>
+          <select>
+            <option value="">Select</option>
+            <option>Homework</option>
+            <option>Revision</option>
+            <option>Project</option>
+            <option>Exam Prep</option>
+            <option>Other</option>
+          </select>
+        </td>
+        <td>
+          <select>
+            <option value="">Select</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </td>
+        <td>
+          <select>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </td>
+        <td><textarea></textarea></td>
+        <td>
+          <button class="btn" onclick="saveTask(this)">Save</button>
+          <button class="btn" onclick="this.closest('tr').remove()">Cancel</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    // Save task (new or update)
+    async function saveTask(btn) {
+      const row = btn.closest("tr");
+      const inputs = row.querySelectorAll("input, select, textarea");
+      const task = {
+        date: inputs[0].value,
+        time: inputs[1].value,
+        subject: inputs[2].value,
+        task: inputs[3].value,
+        category: inputs[4].value,
+        priority: inputs[5].value,
+        status: inputs[6].value,
+        notes: inputs[7].value,
+      };
+
+      let url = "/api/planner";
+      let method = "POST";
+
+      if (row.dataset.id) {
+        url += "/" + row.dataset.id;
+        method = "PUT";
+      }
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(task),
+      });
+
+      const data = await res.json();
+      if (data.ok) {
+        alert("Task saved!");
+        loadTasks();
+      } else {
+        alert("Error: " + data.error);
+      }
+    }
+
+    // Update only status
+    async function updateStatus(select) {
+      const row = select.closest("tr");
+      const id = row.dataset.id;
+      const status = select.value;
+
+      const res = await fetch("/api/planner/" + id, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+
+      const data = await res.json();
+      if (!data.ok) {
+        alert("Error updating status: " + data.error);
+      }
+    }
+
+    // Delete task
+    async function deleteTask(btn) {
+      const row = btn.closest("tr");
+      if (!row.dataset.id) {
+        row.remove();
+        return;
+      }
+      if (!confirm("Delete this task?")) return;
+
+      const res = await fetch("/api/planner/" + row.dataset.id, { method: "DELETE" });
+      const data = await res.json();
+      if (data.ok) {
+        alert("Task deleted!");
+        loadTasks();
+      } else {
+        alert("Error: " + data.error);
+      }
+    }
+
+    loadTasks();
+  </script>
+</body>
+</html>

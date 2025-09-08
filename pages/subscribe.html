@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subscribe</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+   
+
+    
+
+    .contain {
+      max-width: 1000px;
+      margin: 0 auto;
+      margin-top: 40px;
+      margin-bottom: 40px;
+      border-radius: 1rem;
+      box-shadow: 2 5px 10px -3px rgba(0,0,0,0.1);
+      padding: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+
+    th, td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f8fafc;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    label {
+      font-weight: 500;
+      color: #804ab9;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+       border-left: 4px solid #7e3fca;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #7e3fca;
+      box-shadow: 0 0 0 3px rgba(126, 63, 202, 0.2);
+    }
+
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.875rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #972be3 0%, #7c0f6c 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #a56cdb 0%, #8f1c99 100%);
+      transform: translateY(-2px);
+     
+    }
+
+    .btn-secondary {
+      background-color: #d3d8de;
+      color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background-color: #cbd5e1;
+      transform: translateY(-2px);
+    }
+
+   
+
+    .hint {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+
+    .summary {
+      background-color: #f8fafc;
+      border-left: 4px solid #7e3fca;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      color: #475569;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="progress.html" class="nav-link">Progress</a></li>
+                <li class="nav-item"><a href="study_resources.html" class="nav-link">Resources</a></li>
+                <li class="nav-item"><a href="motivation.html" class="nav-link active">Motivation</a></li>
+                <li class="nav-item"><a href="time_manager.html" class="nav-link">Time Manager</a></li>
+                <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+     <section class="page-header">
+        <div class="container">
+  <h1>Subscribe for Updates</h1>
+            <p>Stay updated with the latest insights and resources tailored just for you.
+Subscribe now to never miss important updates, tips, and exclusive content</p>
+                       <div class="hero-image">
+                <div class="hero-graphic">
+                    <i class="fas fa-book-open"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <div class="contain">
+    <form id="subscribeForm">
+      <table>
+        <tr>
+          <th>Name</th>
+          <td><input type="text" name="name" placeholder="Your full name" required></td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>
+            <input type="email" name="email" placeholder="you@example.com" required>
+            <div class="hint">We’ll send confirmation to this email.</div>
+          </td>
+        </tr>
+        <tr>
+          <th>Plan</th>
+          <td>
+            <select name="plan" required>
+              <option value="">Select a plan</option>
+              <option>Free</option>
+              <option>Student</option>
+              <option>Pro</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Notifications</th>
+          <td>
+            <select name="frequency" required>
+              <option value="">Choose frequency</option>
+              <option>Daily</option>
+              <option>Weekly</option>
+              <option>Monthly</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Notes</th>
+          <td><textarea name="notes" placeholder="Optional notes..."></textarea></td>
+        </tr>
+        <tr>
+          <th>Summary</th>
+          <td><div class="summary" id="summary">Fill out the form to see summary.</div></td>
+        </tr>
+      </table>
+      <div class="actions">
+        <button type="reset" class="btn btn-secondary">Reset</button>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </div>
+    </form>
+  </div>
+  <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>EduTrack</span>
+                    </div>
+                    <p>Helping students organize their time for better academic success.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="progress.html">Progress</a></li>
+                        <li><a href="study_resources.html">Resources</a></li>
+                        <li><a href="motivation.html">Motivation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+  <script>
+    const form = document.getElementById("subscribeForm");
+    const summary = document.getElementById("summary");
+
+    form.addEventListener("input", () => {
+      const name = form.name.value || "—";
+      const plan = form.plan.value || "—";
+      const freq = form.frequency.value || "—";
+      summary.innerHTML = `<strong>${name}</strong> subscribed to <strong>${plan}</strong> plan with <strong>${freq}</strong> updates.`;
+    });
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      alert("Subscription saved!");
+    });
+  </script>
+</body>
+</html>

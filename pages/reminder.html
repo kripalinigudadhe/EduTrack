@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Task Reminder</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+        <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+             <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="scores.html" class="nav-link">Scores</a></li>
+                <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="goals.html" class="nav-link">Goals</a></li>
+                <li class="nav-item"><a href="reports.html" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="login.html" class="nav-link">Login</a></li>
+
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+   
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Academic Task Reminder</h1>
+    <p>Stay on top of your tasks with timely reminders</p>
+  </header>
+
+  <main class="dashboard-content">
+    <div class="container">
+      <!-- Reminder Form Card -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Set a Reminder 📌</h3>
+        </div>
+        <div class="card-content">
+          <form id="reminderForm" class="form-grid">
+            <div class="form-group">
+              <label for="task">Task</label>
+              <input type="text" id="task" placeholder="Enter your task" required>
+            </div>
+            <div class="form-group">
+              <label for="time">Reminder Time</label>
+              <input type="datetime-local" id="time" required>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Set Reminder
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Upcoming Reminders -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Upcoming Reminders</h3>
+        </div>
+        <div class="card-content">
+          <ul id="reminders" class="event-list">
+            <!-- Reminders will be added here -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Reminder Popup -->
+  <div id="popup" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>⏰ Reminder</h3>
+        <button class="close-modal" onclick="closePopup()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="popupMessage"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="closePopup()">OK</button>
+      </div>
+    </div>
+  </div>
+   <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Academic Assistant</span>
+                    </div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/scores">Scores</a></li>
+                        <li><a href="/analytics">Analytics</a></li>
+                        <li><a href="/goals">Goals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+  <script>
+    const reminderForm = document.getElementById("reminderForm");
+    const remindersUl = document.getElementById("reminders");
+    const popup = document.getElementById("popup");
+    const popupMessage = document.getElementById("popupMessage");
+
+    let reminders = [];
+
+    reminderForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      
+      const task = document.getElementById("task").value;
+      const time = new Date(document.getElementById("time").value);
+
+      if (!task || isNaN(time)) return;
+
+      const reminder = { task, time };
+      reminders.push(reminder);
+
+      displayReminders();
+      scheduleReminder(reminder);
+
+      reminderForm.reset();
+    });
+
+    function displayReminders() {
+      remindersUl.innerHTML = "";
+      reminders.forEach(r => {
+        const li = document.createElement("li");
+        li.classList.add("event-item");
+        li.innerHTML = `
+          <div class="event-date">
+            <span class="event-day">${r.time.getDate()}</span>
+            <span class="event-month">${r.time.toLocaleString('default', { month: 'short' })}</span>
+          </div>
+          <div>
+            <div class="event-title">${r.task}</div>
+            <div class="event-time">${r.time.toLocaleString()}</div>
+          </div>
+        `;
+        remindersUl.appendChild(li);
+      });
+    }
+
+    function scheduleReminder(reminder) {
+      const now = new Date();
+      const timeToReminder = reminder.time - now;
+
+      if (timeToReminder > 0) {
+        setTimeout(() => {
+          showPopup(`📌 ${reminder.task} <br>⏰ at ${reminder.time.toLocaleString()}`);
+        }, timeToReminder);
+      }
+    }
+
+    function showPopup(message) {
+      popupMessage.innerHTML = message;
+      popup.style.display = "flex";
+    }
+
+    function closePopup() {
+      popup.style.display = "none";
+    }
+  </script>
+</body>
+</html>

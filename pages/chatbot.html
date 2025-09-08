@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduTrack Chatbot</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      background: #f8f5f9;
+      display: flex;
+      flex-direction: column;
+    }
+
+   .chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 70px auto; /* add some vertical spacing */
+  margin-top: 130px;
+  width: 60%;
+  max-width: 850px;
+  height: 40%; /* reduced from 50% to 40% */
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0px 4px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+
+    .chat-header {
+      background: #7f4ad3;
+      color: white;
+      padding: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      max-width: 75%;
+      word-wrap: break-word;
+    }
+
+    .user {
+      background:#7f4ad3;
+      color: white;
+      margin-left: auto;
+    }
+
+    .bot {
+      background: #e5e5e5;
+      color: black;
+      margin-right: auto;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 15px;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .chat-input button {
+      margin-left: 10px;
+      padding: 12px 18px;
+      border: none;
+      background: #7f4ad3;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .chat-input button:hover {
+      background: #9b76d6;
+    }
+
+    .voice-btn {
+      margin-left: 10px;
+      background: #4caf50;
+    }
+
+    .voice-btn:hover {
+      background: #66bb6a;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EduTrack</span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
+        <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="progress.html" class="nav-link">Progress</a></li>
+        <li class="nav-item"><a href="study_resources.html" class="nav-link">Resources</a></li>
+        <li class="nav-item"><a href="motivation.html" class="nav-link">Motivation</a></li>
+        <li class="nav-item"><a href="time_manager.html" class="nav-link">Time Manager</a></li>
+        <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="chat-container">
+    <div class="chat-header"><h2>EduTrack Chatbot <span style="font-size:1.3em;">🤖</span></h2></div>
+    <div id="chatMessages" class="chat-messages"></div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Ask me anything..." />
+      <button onclick="sendMessage()">Send</button>
+      <button class="voice-btn" onclick="startVoice()">Speak 🎤</button>
+    </div>
+  </div>
+
+  <script>
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = document.getElementById("userInput");
+
+    function appendMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.textContent = text;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+      appendMessage(message, "user");
+      userInput.value = "";
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        appendMessage(data.reply || "⚠ Error fetching response", "bot");
+      } catch (err) {
+        appendMessage("⚠ Network error", "bot");
+      }
+    }
+
+    // ===== Voice Recognition =====
+    let recognition;
+    function startVoice() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Your browser does not support speech recognition.");
+        return;
+      }
+
+      if (!recognition) {
+        recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onresult = (event) => {
+          const speechResult = event.results[0][0].transcript;
+          userInput.value = speechResult; // show in input box
+        };
+
+        recognition.onerror = (event) => {
+          console.error("Speech recognition error:", event.error);
+        };
+      }
+
+      recognition.start();
+    }
+  </script>
+</body>
+</html>

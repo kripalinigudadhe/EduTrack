@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - EduTrack</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Additional styles for feature cards */
+        .features-section {
+            padding: 100px 20px 60px;
+            background-color: #f8fafc;
+            text-align: center;
+            margin-top: 30px;
+
+        }
+
+        .features-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #16082d;
+        }
+
+        .features-section p {
+            max-width: 750px;
+            margin: 0 auto 40px;
+            text-align: center;
+            font-size: 1.3rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+.grid-container {
+      display: grid;
+      justify-content: center;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #7e3fca;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #16082d;
+        }
+
+        .feature-desc {
+            font-size: 1rem;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+        footer{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="/" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="scores.html" class="nav-link">Scores</a></li>
+                <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="goals.html" class="nav-link">Goals</a></li>
+                <li class="nav-item"><a href="reports.html" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Features Section -->
+     
+    <section class="features-section">
+        <h1>Our Features</h1>
+        <p>
+            Discover powerful tools to enhance your learning experience. 
+            EduTrack is a comprehensive academic assistant designed to help students manage their time effectively, 
+            track weekly progress, and stay motivated. With an intuitive interface and advanced features, 
+            your learning journey becomes more organized and productive. This project is designed to simplify academic planning and tracking. With powerful tools, insightful analytics, and an intuitive interface, we help you stay ahead in your educational journey. Explore our core features below.
+        </p>
+
+        <section class="grid-container">
+    <!-- Row 1 -->
+            <!-- Feature 1 -->
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Progress Tracking</div>
+                <div class="feature-desc">
+                Plan your study sessions efficiently with time allocation features that ensure balance between different subjects and topics.
+                </div>
+                <a href="progress.html" class="btn btn-primary">View </a>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <div class="feature-title">Weekly Reports</div>
+                <div class="feature-desc">
+                    Submit weekly forms to track improvements. Monitor your goals and achievements to stay on top of your schedule.
+                </div>
+                  <a href="week_report.html" class="btn btn-primary">View </a>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <div class="feature-title">Study Resources</div>
+                <div class="feature-desc">
+                    Access curated study materials anytime. Visualize your academic performance through interactive graphs and charts and some basic formula structures.
+                </div>
+                  <a href="study_resources.html" class="btn btn-primary">View </a>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <div class="feature-title">Reminders</div>
+                <div class="feature-desc">
+                    Get timely alerts for assignments and exams. Never miss an important task or deadline again.
+                </div>
+                  <a href="reminder.html" class="btn btn-primary">View </a>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="feature-card">
+                <div class="feature-icon">🌟</div>
+                <div class="feature-title">Motivation & Insights</div>
+                <div class="feature-desc">
+                    Receive motivational tips and insights based on your study patterns to keep you engaged and focused.
+                </div>
+                  <a href="motivation.html" class="btn btn-primary">View </a>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="feature-card">
+                <div class="feature-icon">⏳</div>
+                <div class="feature-title">Time Management Tools</div>
+                <div class="feature-desc">
+                    Plan your study sessions effectively. Ensure a balanced schedule across all subjects for better productivity.
+                </div>
+                 <a href="time_manager.html" class="btn btn-primary">View </a>
+            </div>
+             
+        </div>
+    </section>
+        <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Academic Assistant</span>
+                    </div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/scores">Scores</a></li>
+                        <li><a href="/analytics">Analytics</a></li>
+                        <li><a href="/goals">Goals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reports - Academic Assistant</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- libraries to render HTML to canvas and export PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* Small styling for the report preview area (only used for rendering) */
+        #reportContent {
+            width: 800px;
+            background: #fff;
+            color: #222;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            padding: 28px;
+            box-sizing: border-box;
+        }
+        .report-cover {
+            text-align: center;
+            padding: 40px 10px;
+        }
+        .report-cover h1 { margin: 10px 0; font-size: 28px; color: #2a2a72; }
+        .report-meta { display:flex; justify-content: space-between; margin: 18px 0; font-size: 0.95rem; color: #555; }
+        .section { margin-top:24px; }
+        .section h3 { color:#2a2a72; margin-bottom:10px; }
+        .summary-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:12px;}
+        .summary-card { background:#f6f7fb; padding:12px; border-radius:8px; text-align:center; }
+        table.report-table { width:100%; border-collapse: collapse; margin-top:12px; font-size:0.9rem;}
+        table.report-table th, table.report-table td { border:1px solid #e6e6e6; padding:8px; text-align:left; }
+        .chart-mini { width:100%; height:160px; }
+        /* make preview overlay nicer */
+        #reportPreviewPanel { position: fixed; inset:0; background: rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:9999; }
+        #reportPreviewInner { background:#fff; padding:16px; border-radius:8px; max-height:90vh; overflow:auto; box-shadow:0 10px 30px rgba(0,0,0,0.25); }
+        #reportPreviewInner .actions { display:flex; gap:10px; justify-content:flex-end; margin-bottom:10px;}
+    </style>
+</head>
+<body>
+    <!-- Navigation (kept unchanged) -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+           <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="/scores" class="nav-link">Scores</a></li>
+                <li class="nav-item"><a href="analytics.html" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="goals.html" class="nav-link">Goals</a></li>
+                <li class="nav-item"><a href="reports.html" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Academic Reports</h1>
+            <p>Generate comprehensive reports for students, parents, and teachers</p>
+        </div>
+         <div class="hero-image">
+                <div class="hero-graphic">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+            </div>
+    </section>
+
+    <!-- Reports Content -->
+    <section class="reports-content">
+        <div class="container">
+            <!-- Report Generator (keeps original UI) -->
+            <div class="report-generator">
+                <div class="generator-header">
+                    <h2>Generate New Report</h2>
+                    <p>Create customized reports with your academic data</p>
+                </div>
+                <div class="generator-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reportType">Report Type</label>
+                            <select id="reportType">
+                                <option value="performance">Performance Summary</option>
+                                <option value="detailed">Detailed Analysis</option>
+                                <option value="parent">Parent Report</option>
+                                <option value="teacher">Teacher Report</option>
+                                <option value="progress">Progress Report</option>
+                                <option value="goals">Goals Report</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="timePeriod">Time Period</label>
+                            <select id="timePeriod">
+                                <option value="all">All Data</option>
+                                <option value="current-month">Current Month</option>
+                                <option value="last-month">Last Month</option>
+                                <option value="current-semester">Current Semester</option>
+                                <option value="last-semester">Last Semester</option>
+                                <option value="current-year">Current Year</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subjects">Subjects</label>
+                            <select id="subjects" multiple>
+                                <option value="all">All Subjects</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="physics">Physics</option>
+                                <option value="chemistry">Chemistry</option>
+                                <option value="biology">Biology</option>
+                                <option value="english">English</option>
+                                <option value="history">History</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="format">Export Format</label>
+                            <select id="format">
+                                <option value="pdf">PDF Document</option>
+                                <option value="html">Web Page</option>
+                                <option value="excel">Excel Spreadsheet</option>
+                                <option value="word">Word Document</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="custom-date-range" id="customDateRange" style="display: none;">
+                        <div class="form-group">
+                            <label for="startDate">Start Date</label>
+                            <input type="date" id="startDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">End Date</label>
+                            <input type="date" id="endDate">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="generateReport">
+                            <i class="fas fa-file-alt"></i> Generate Report
+                        </button>
+                        <button class="btn btn-secondary" id="previewReport">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                        <button class="btn btn-outline" id="downloadPdfBtn">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- (kept templates and recent reports unchanged below) -->
+            <div class="report-templates" style="margin-top:18px;">
+                <h2>Report Templates</h2>
+                <div class="templates-grid">
+                    <!-- Template cards kept but shortened for brevity -->
+                    <div class="template-card">
+                        <div class="template-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>Performance Summary</h3>
+                        <p>Quick overview of academic performance with key metrics and trends</p>
+                        <div class="template-features">
+                            <span class="feature">GPA Analysis</span>
+                            <span class="feature">Subject Breakdown</span>
+                            <span class="feature">Trend Charts</span>
+                        </div>
+                        <button class="btn btn-outline" onclick="selectTemplate('performance')">Use Template</button>
+                    </div>
+                    <!-- ... other templates unchanged ... -->
+                </div>
+            </div>
+
+            <!-- Recent Reports (unchanged display) -->
+            <div class="recent-reports" style="margin-top:18px;">
+                <div class="section-header">
+                    <h2>Recent Reports</h2>
+                    <button class="btn btn-secondary" id="clearHistory">
+                        <i class="fas fa-trash"></i> Clear History
+                    </button>
+                </div>
+                <div class="reports-table-container">
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>Report Name</th>
+                                <th>Type</th>
+                                <th>Period</th>
+                                <th>Generated</th>
+                                <th>Size</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentReportsBody">
+                            <!-- Filled dynamically if needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hidden printable report container (populated at runtime) -->
+    <div id="reportPreview" style="display:none;">
+        <div id="reportContent">
+            <!-- Content injected by JS when generating -->
+        </div>
+    </div>
+
+    <!-- Modal-style preview overlay -->
+    <div id="reportPreviewPanel" style="display:none;">
+        <div id="reportPreviewInner">
+            <div class="actions">
+                <button id="downloadFromPreview" class="btn btn-primary"><i class="fas fa-download"></i> Download PDF</button>
+                <button id="closePreview" class="btn btn-secondary"><i class="fas fa-times"></i> Close</button>
+            </div>
+            <div id="reportPreviewArea"></div>
+        </div>
+    </div>
+
+    <!-- Footer unchanged -->
+    <footer class="footer" style="margin-top:20px;">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"><i class="fas fa-graduation-cap"></i><span>Academic Assistant</span></div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="scores.html">Scores</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                        <li><a href="goals.html">Goals</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS: gather data, build report, preview & export PDF -->
+    <script>
+    // ---------- Helper: read all entries from IndexedDB weeklyEntries ----------
+    function readWeeklyEntriesFromIDB() {
+        return new Promise((resolve, reject) => {
+            const DB_NAME = 'eduTrackDB';
+            const DB_STORE = 'weeklyEntries';
+            const req = indexedDB.open(DB_NAME, 1);
+            req.onsuccess = (e) => {
+                const db = e.target.result;
+                const tx = db.transaction(DB_STORE, 'readonly');
+                const store = tx.objectStore(DB_STORE);
+                const getAll = store.getAll();
+                getAll.onsuccess = () => resolve(getAll.result || []);
+                getAll.onerror = (err) => reject(err);
+            };
+            req.onupgradeneeded = (e) => {
+                // No data yet
+                e.target.result.createObjectStore(DB_STORE, { keyPath: 'id', autoIncrement: true });
+            };
+            req.onerror = (err) => reject(err);
+        });
+    }
+
+    // ---------- Build a styled report HTML string and inject into #reportContent ----------
+    function buildReportHtml({ weeklyEntries = [], progressData = [], reportType = 'performance', periodLabel = 'All Data' }) {
+        // compute summary metrics
+        const totalProgressEntries = progressData.length;
+        const totalWeeklyEntries = weeklyEntries.length;
+
+        const avgStudyHours = progressData.length ? (progressData.reduce((s, d) => s + (parseFloat(d.studyHours) || 0), 0) / progressData.length).toFixed(1) : '—';
+        const avgAssignments = progressData.length ? (progressData.reduce((s, d) => s + (parseInt(d.assignmentsCompleted) || 0), 0) / progressData.length).toFixed(1) : '—';
+        const avgAttendance = progressData.length ? (progressData.reduce((s, d) => s + (parseFloat(d.attendancePercentage) || 0), 0) / progressData.length).toFixed(1) : '—';
+
+        // composite average from weeklyEntries (if any)
+        let compositeAvgAll = '—';
+        if (weeklyEntries.length) {
+            const sum = weeklyEntries.reduce((s, e) => s + (e.avg || 0), 0);
+            compositeAvgAll = (sum / weeklyEntries.length).toFixed(1);
+        }
+
+        // pick student name(s) found
+        const studentNames = new Set(progressData.map(d => d.studentName).filter(Boolean));
+        const studentLabel = studentNames.size ? Array.from(studentNames).slice(0,3).join(', ') + (studentNames.size>3 ? '...' : '') : 'All Students';
+
+        const now = new Date();
+        const generatedOn = now.toLocaleString();
+
+        // Build HTML content (kept fairly simple & printable)
+        const html = `
+        <div class="report-cover">
+            <div style="display:flex; gap:12px; align-items:center; justify-content:center;">
+                <div style="width:56px; height:56px; border-radius:8px; background:#2a2a72; display:flex; align-items:center; justify-content:center; color:#fff;">
+                    <i class="fas fa-graduation-cap" style="font-size:20px"></i>
+                </div>
+                <div style="text-align:left;">
+                    <h1>EduTrack — ${escapeHtml(reportType.replace('-', ' '))} Report</h1>
+                    <div style="color:#666;">${escapeHtml(studentLabel)} • ${escapeHtml(periodLabel)}</div>
+                </div>
+            </div>
+            <div style="margin-top:18px; color:#444;">Generated: ${escapeHtml(generatedOn)}</div>
+        </div>
+
+        <div class="section">
+            <h3>Summary</h3>
+            <div class="summary-grid" style="margin-top:10px;">
+                <div class="summary-card"><div style="font-size:18px; font-weight:700">${totalProgressEntries}</div><div style="font-size:12px; color:#666">Progress Entries</div></div>
+                <div class="summary-card"><div style="font-size:18px; font-weight:700">${totalWeeklyEntries}</div><div style="font-size:12px; color:#666">Weekly Entries</div></div>
+                <div class="summary-card"><div style="font-size:18px; font-weight:700">${avgStudyHours}</div><div style="font-size:12px; color:#666">Avg Study Hours</div></div>
+                <div class="summary-card"><div style="font-size:18px; font-weight:700">${avgAttendance}%</div><div style="font-size:12px; color:#666">Avg Attendance</div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Composite Score Overview</h3>
+            <div style="margin-top:8px; font-size: 14px; color:#333;">
+                Average composite score across recorded weeks: <strong>${compositeAvgAll}</strong>
+            </div>
+            <canvas id="reportCompositeChart" class="chart-mini" style="margin-top:12px;"></canvas>
+        </div>
+
+        <div class="section">
+            <h3>Progress Data (Recent)</h3>
+            <table class="report-table" style="margin-top:8px;">
+                <thead><tr><th>Student</th><th>Week</th><th>Study Hours</th><th>Assignments</th><th>Attendance %</th></tr></thead>
+                <tbody>
+                    ${progressData.slice(-8).map(d => `<tr>
+                        <td>${escapeHtml(d.studentName || '')}</td>
+                        <td>${escapeHtml(String(d.week || ''))}</td>
+                        <td>${escapeHtml(String(d.studyHours || ''))}</td>
+                        <td>${escapeHtml(String(d.assignmentsCompleted || ''))}</td>
+                        <td>${escapeHtml(String(d.attendancePercentage || ''))}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>Weekly Entries (Recent)</h3>
+            <table class="report-table" style="margin-top:8px;">
+                <thead><tr><th>Student/WeekNo</th><th>Date</th><th>Subject</th><th>Avg</th><th>Comments</th></tr></thead>
+                <tbody>
+                    ${weeklyEntries.slice(-8).map(e => `<tr>
+                        <td>${escapeHtml(e.studentName || '')}</td>
+                        <td>${escapeHtml((new Date(e.weekStart || '')).toLocaleDateString())}</td>
+                        <td>${escapeHtml(e.subject || '')}</td>
+                        <td>${escapeHtml(String(e.avg || ''))}</td>
+                        <td>${escapeHtml(e.comments ? e.comments.slice(0,80) : '')}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top:18px; color:#888; font-size:12px;">Report generated by EduTrack • ${escapeHtml(generatedOn)}</div>
+        `;
+        return html;
+    }
+
+    // escape helper
+    function escapeHtml(str) {
+        return String(str || '').replace(/[&<>"']/g, function (m) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+        });
+    }
+
+    // ---------- Create charts inside the generated report (called after injecting HTML) ----------
+    function createReportCharts(weeklyEntries, progressData) {
+        // Composite chart data: labels = weekStart (last N)
+        const compositeLabels = weeklyEntries.map(e => {
+            try { return (new Date(e.weekStart)).toLocaleDateString(); } catch { return ''; }
+        });
+        const compositeData = weeklyEntries.map(e => e.avg || 0);
+
+        const ctx = document.getElementById('reportCompositeChart')?.getContext('2d');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: compositeLabels,
+                    datasets: [{
+                        label: 'Composite Score',
+                        data: compositeData,
+                        borderColor: '#2a2a72',
+                        backgroundColor: 'rgba(42,42,114,0.08)',
+                        fill: true,
+                        tension: 0.35
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
+        }
+    }
+
+    // ---------- Render report preview area and open preview panel ----------
+    async function renderAndShowPreview(weeklyEntries, progressData, reportType, periodLabel) {
+        const container = document.getElementById('reportContent');
+        container.innerHTML = buildReportHtml({ weeklyEntries, progressData, reportType, periodLabel });
+
+        // small delay so canvas elements render
+        await new Promise(r => setTimeout(r, 100));
+        createReportCharts(weeklyEntries, progressData);
+
+        // move the generated content into the preview panel
+        const previewArea = document.getElementById('reportPreviewArea');
+        previewArea.innerHTML = '';
+        previewArea.appendChild(container.cloneNode(true));
+
+        // Need to re-create charts inside preview cloned node: find canvas and re-render charts
+        // Simpler approach: render canvas to images in the original and copy images into preview
+        // Take snapshot of the original reportContent area using html2canvas and set into preview
+        const orig = document.getElementById('reportContent');
+        await new Promise(r => setTimeout(r, 250)); // small wait for charts to finish drawing
+        const canvas = await html2canvas(orig, { scale: 1.4, useCORS: true });
+        const img = canvas.toDataURL('image/png');
+        previewArea.innerHTML = `<img src="${img}" style="max-width:100%; height:auto; display:block;" />`;
+        document.getElementById('reportPreviewPanel').style.display = 'flex';
+    }
+
+    // ---------- Export PDF using html2canvas + jsPDF ----------
+    async function exportReportToPdf(weeklyEntries, progressData, reportType, periodLabel, fileName = 'EduTrack_Report') {
+        // build in DOM
+        const container = document.createElement('div');
+        container.style.width = '800px';
+        container.style.padding = '18px';
+        container.style.background = '#fff';
+        container.innerHTML = buildReportHtml({ weeklyEntries, progressData, reportType, periodLabel });
+
+        document.body.appendChild(container); // temporarily add to DOM so charts render
+        // allow chart drawing
+        await new Promise(r => setTimeout(r, 300));
+        createReportCharts(weeklyEntries, progressData);
+
+        // wait a moment then render
+        await new Promise(r => setTimeout(r, 400));
+        const canvas = await html2canvas(container, { scale: 2, useCORS: true });
+
+        // use jsPDF to create PDF from canvas
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ unit: 'px', format: 'a4', orientation: 'portrait' });
+        const imgData = canvas.toDataURL('image/png');
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        // calculate image dimensions to fit A4 while preserving aspect ratio
+        const imgProps = { width: canvas.width, height: canvas.height };
+        const ratio = Math.min(pageWidth / imgProps.width, pageHeight / imgProps.height);
+        const imgWidth = imgProps.width * ratio;
+        const imgHeight = imgProps.height * ratio;
+
+        pdf.addImage(imgData, 'PNG', (pageWidth - imgWidth) / 2, 20, imgWidth, imgHeight);
+        pdf.save(fileName + '.pdf');
+
+        // cleanup
+        container.remove();
+    }
+
+    // ---------- Wire up buttons: generate, preview, download ----------
+    document.getElementById('timePeriod').addEventListener('change', (e) => {
+        document.getElementById('customDateRange').style.display = e.target.value === 'custom' ? 'flex' : 'none';
+    });
+
+    document.getElementById('previewReport').addEventListener('click', async () => {
+        try {
+            const weeklyEntries = await readWeeklyEntriesFromIDB();
+            const progressData = JSON.parse(localStorage.getItem('progressData')) || [];
+            await renderAndShowPreview(weeklyEntries, progressData, document.getElementById('reportType').value, document.getElementById('timePeriod').value);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to build preview: ' + err.message);
+        }
+    });
+
+    document.getElementById('closePreview').addEventListener('click', () => {
+        document.getElementById('reportPreviewPanel').style.display = 'none';
+    });
+
+    // download from preview button
+    document.getElementById('downloadFromPreview').addEventListener('click', async () => {
+        try {
+            const weeklyEntries = await readWeeklyEntriesFromIDB();
+            const progressData = JSON.parse(localStorage.getItem('progressData')) || [];
+            await exportReportToPdf(weeklyEntries, progressData, document.getElementById('reportType').value, document.getElementById('timePeriod').value, 'EduTrack_Report');
+        } catch (err) {
+            console.error(err);
+            alert('PDF export failed: ' + err.message);
+        }
+    });
+
+    // main generate button: also adds a download action (same as preview->download)
+    document.getElementById('generateReport').addEventListener('click', async (ev) => {
+        ev.preventDefault();
+        try {
+            const weeklyEntries = await readWeeklyEntriesFromIDB();
+            const progressData = JSON.parse(localStorage.getItem('progressData')) || [];
+            // quick preview first (hidden) then auto-download
+            await exportReportToPdf(weeklyEntries, progressData, document.getElementById('reportType').value, document.getElementById('timePeriod').value, 'EduTrack_Report');
+            // Optionally: add to recent reports table (basic)
+            addRecentReportEntry('EduTrack_Report', document.getElementById('reportType').value, document.getElementById('timePeriod').value);
+        } catch (err) {
+            console.error(err);
+            alert('Report generation failed: ' + err.message);
+        }
+    });
+
+    // small helper for recent reports list
+    function addRecentReportEntry(name, type, period) {
+        const tbody = document.getElementById('recentReportsBody');
+        const tr = document.createElement('tr');
+        const now = new Date();
+        tr.innerHTML = `
+            <td><div class="report-info"><i class="fas fa-file-pdf"></i><span>${escapeHtml(name)}</span></div></td>
+            <td><span class="report-type">${escapeHtml(type)}</span></td>
+            <td>${escapeHtml(period)}</td>
+            <td>${escapeHtml(now.toLocaleString())}</td>
+            <td>—</td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn-icon view-btn" title="View"><i class="fas fa-eye"></i></button>
+                    <button class="btn-icon share-btn" title="Share"><i class="fas fa-share"></i></button>
+                    <button class="btn-icon delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                </div>
+            </td>`;
+        tbody.prepend(tr);
+    }
+
+    // Template quick-select helper
+    function selectTemplate(type) {
+        document.getElementById('reportType').value = type;
+        alert('Template selected: ' + type);
+    }
+    window.selectTemplate = selectTemplate;
+
+    // Copy link behavior, share modal, other UI bits kept simple
+    document.getElementById('clearHistory').addEventListener('click', () => {
+        if (confirm('Clear recent reports list?')) {
+            document.getElementById('recentReportsBody').innerHTML = '';
+        }
+    });
+
+    // hamburger nav toggle
+    document.getElementById('hamburger').addEventListener('click', () => {
+        document.getElementById('nav-menu').classList.toggle('active');
+    });
+
+    </script>
+</body>
+</html>
