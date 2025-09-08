@@ -1,1 +1,13 @@
+services:
+  - type: web
+    name: edutrack
+    env: node
+    plan: free  # you can change to starter/standard later
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
 
