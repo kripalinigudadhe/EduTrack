@@ -1,0 +1,561 @@
+<!-- views/scores.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scores - EduTrack</title>
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo"><i class="fas fa-graduation-cap"></i><span>EduTrack</span></div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="/scores" class="nav-link active">Scores</a></li>
+        <li class="nav-item"><a href="/pages/analytics.html" class="nav-link">Analytics</a></li>
+        <li class="nav-item"><a href="/pages/goals.html" class="nav-link">Goals</a></li>
+        <li class="nav-item"><a href="/pages/reports.html" class="nav-link">Reports</a></li>
+        <li class="nav-item"><a href="/pages/about.html" class="nav-link">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Academic Scores</h1>
+      <p>Manage and track your academic performance across all subjects</p>
+    </div>
+    <div class="hero-image">
+      <div class="hero-graphic"><i class="fas fa-trophy"></i></div>
+    </div>
+  </section>
+
+  <!-- Scores Content -->
+  <section class="scores-content">
+    <div class="container">
+      <!-- Add Score Form -->
+      <div class="score-form-card">
+        <div class="card-header">
+          <h3>Add New Score</h3>
+          <button class="toggle-form-btn" id="toggleFormBtn"><i class="fas fa-plus"></i></button>
+        </div>
+        <div class="card-content" id="scoreForm" style="display:none;">
+          <form id="addScoreForm" class="score-form">
+            <input type="hidden" id="editingId" value="">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <select id="subject" required>
+                  <option value="">Select Subject</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Physics">Physics</option>
+                  <option value="Chemistry">Chemistry</option>
+                  <option value="Biology">Biology</option>
+                  <option value="English">English</option>
+                  <option value="History">History</option>
+                  <option value="Geography">Geography</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="examType">Exam Type</label>
+                <select id="examType" required>
+                  <option value="">Select Type</option>
+                  <option value="Quiz">Quiz</option>
+                  <option value="Midterm">Midterm</option>
+                  <option value="Final Exam">Final Exam</option>
+                  <option value="Assignment">Assignment</option>
+                  <option value="Project">Project</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="score">Score</label>
+                <input type="number" id="score" min="0" max="100" required>
+              </div>
+              <div class="form-group">
+                <label for="maxScore">Max Score</label>
+                <input type="number" id="maxScore" min="1" value="100" required>
+              </div>
+              <div class="form-group">
+                <label for="examDate">Exam Date</label>
+                <input type="date" id="examDate" required>
+              </div>
+              <div class="form-group">
+                <label for="notes">Notes (Optional)</label>
+                <input type="text" id="notes" placeholder="Any additional notes...">
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Score</button>
+              <button type="button" class="btn btn-secondary" id="clearForm"><i class="fas fa-undo"></i> Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Filters and Search -->
+      <div class="filters-card">
+        <div class="filters-content">
+          <div class="search-group">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="searchScores" placeholder="Search scores...">
+            </div>
+          </div>
+          <div class="filter-group">
+            <select id="subjectFilter">
+              <option value="all">All Subjects</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Biology">Biology</option>
+              <option value="English">English</option>
+              <option value="History">History</option>
+              <option value="Geography">Geography</option>
+            </select>
+            <select id="typeFilter">
+              <option value="all">All Types</option>
+              <option value="Quiz">Quiz</option>
+              <option value="Midterm">Midterm</option>
+              <option value="Final Exam">Final</option>
+              <option value="Assignment">Assignment</option>
+              <option value="Project">Project</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 📊 Subject Scores Pie Chart -->
+      <div class="scores-chart-card">
+        <div class="card-header">
+          <h3>Subject Scores Distribution</h3>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+  <canvas id="subjectScoresChart" style="max-width:400px;max-height:400px;"></canvas>
+  <div id="weakSubject" style="text-align:center; margin-top:15px; font-weight:bold; font-size:18px; color:red;">
+  <!-- Weak subject will appear here -->
+</div>
+</div>
+
+      </div>
+
+      <!-- Scores Table -->
+      <div class="scores-table-card">
+        <div class="card-header">
+          <h3>Your Scores</h3>
+          <div class="table-actions">
+            <button class="btn btn-secondary" id="exportBtn"><i class="fas fa-download"></i> Export</button>
+            <button class="btn btn-secondary" id="importBtn"><i class="fas fa-upload"></i> Import</button>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="table-container">
+            <table class="scores-table">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Type</th>
+                  <th>Score</th>
+                  <th>Percentage</th>
+                  <th>Date</th>
+                  <th>Grade</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="scoresTableBody">
+                <% (scores || []).forEach(row => { 
+                  const percent = Math.round((row.score / row.max_score) * 100);
+                  const grade = percent >= 90 ? 'A' : percent >= 80 ? 'B' : percent >= 70 ? 'C' : percent >= 60 ? 'D' : 'F';
+                %>
+                <tr data-id="<%= row.id %>">
+                  <td><div class="subject-cell"><i class="fas fa-calculator subject-icon"></i> <%= row.subject %></div></td>
+                  <td><span class="exam-type"><%= row.exam_type %></span></td>
+                  <td><%= row.score %>/<%= row.max_score %></td>
+                  <td><span class="percentage-value"><%= percent %>%</span></td>
+                  <td><%= row.exam_date.toISOString().slice(0,10) %></td>
+                  <td><span class="grade <%= grade %>"><%= grade %></span></td>
+                  <td>
+                    <button class="btn-icon edit-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="btn-icon delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Import Modal -->
+      <div id="importModal" class="modal" style="display:none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Import Scores</h3>
+            <button class="close-modal"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="modal-body">
+            <input type="file" id="csvFile" accept=".csv" />
+            <p class="muted">CSV format: subject,exam_type,score,max_score,exam_date(YYYY-MM-DD),notes</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary close-modal">Cancel</button>
+            <button class="btn btn-primary" id="importData">Import</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+ <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>EduTrack</span>
+                    </div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/pages/scores.html">Scores</a></li>
+                        <li><a href="/pages/analytics.html">Analytics</a></li>
+                        <li><a href="/pages/goals.html">Goals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+  <!-- Client-side JS -->
+  <script>
+(function(){
+  const apiBase = '/api/scores';
+  const toggleFormBtn = document.getElementById('toggleFormBtn');
+  const scoreFormContainer = document.getElementById('scoreForm');
+  const addScoreForm = document.getElementById('addScoreForm');
+  const clearFormBtn = document.getElementById('clearForm');
+  const scoresTableBody = document.getElementById('scoresTableBody');
+  const searchInput = document.getElementById('searchScores');
+  const subjectFilter = document.getElementById('subjectFilter');
+  const typeFilter = document.getElementById('typeFilter');
+  const exportBtn = document.getElementById('exportBtn');
+  const importBtn = document.getElementById('importBtn');
+  const importModal = document.getElementById('importModal');
+  const closeModalBtns = document.querySelectorAll('.close-modal');
+  const importDataBtn = document.getElementById('importData');
+  
+  let subjectChart = null; // chart instance
+
+  // ===== Chart rendering =====
+  function renderSubjectScoresChart(){
+    const rows = document.querySelectorAll('#scoresTableBody tr');
+    const totals = {};
+    rows.forEach(r => {
+      if (r.style.display === 'none') return; // respect filters
+      const subject = r.cells[0].innerText.trim();
+      const percentText = r.cells[3].innerText.replace('%','');
+      const percent = parseFloat(percentText);
+      if (!isNaN(percent)){
+        if (!totals[subject]) totals[subject] = [];
+        totals[subject].push(percent);
+      }
+    });
+    const labels = Object.keys(totals);
+    const data = labels.map(s => {
+      const arr = totals[s];
+      return arr.reduce((a,b)=>a+b,0)/arr.length; // average %
+    });
+
+    const ctx = document.getElementById('subjectScoresChart').getContext('2d');
+    if (subjectChart) subjectChart.destroy();
+    subjectChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels,
+        datasets: [{
+          data,
+          backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF','#FF9F40','#8E44AD']
+        }]
+      },
+      options: {
+        plugins: {
+          title: { display: true, text: 'Average % Score per Subject' },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.label}: ${ctx.raw.toFixed(1)}%`
+            }
+          }
+        }
+      }
+    });
+
+    // ===== Weakest subject display =====
+    const weakSubjectDiv = document.getElementById('weakSubject');
+    if (labels.length > 0) {
+      let minIndex = data.indexOf(Math.min(...data));
+      let weakSubject = labels[minIndex];
+      weakSubjectDiv.textContent = `Weakest Subject: ${weakSubject} (${data[minIndex].toFixed(1)}%)`;
+    } else {
+      weakSubjectDiv.textContent = '';
+    }
+  }
+
+  // toggle add form
+  toggleFormBtn.addEventListener('click', () => {
+    scoreFormContainer.style.display = scoreFormContainer.style.display === 'none' ? 'block' : 'none';
+  });
+
+  // clear
+  clearFormBtn.addEventListener('click', () => {
+    addScoreForm.reset();
+    document.getElementById('editingId').value = '';
+  });
+
+  // helper: add a table row to DOM
+  function appendScoreRow(row) {
+    const percent = Math.round((row.score / row.max_score) * 100);
+    const grade = percent >= 90 ? 'A' : percent >= 80 ? 'B' : percent >= 70 ? 'C' : percent >= 60 ? 'D' : 'F';
+    const tr = document.createElement('tr');
+    tr.dataset.id = row.id;
+    tr.innerHTML = `
+      <td><div class="subject-cell"><i class="fas fa-calculator subject-icon"></i> ${escapeHtml(row.subject)}</div></td>
+      <td><span class="exam-type">${escapeHtml(row.exam_type)}</span></td>
+      <td>${row.score}/${row.max_score}</td>
+      <td><span class="percentage-value">${percent}%</span></td>
+      <td>${(new Date(row.exam_date)).toISOString().slice(0,10)}</td>
+      <td><span class="grade ${grade}">${grade}</span></td>
+      <td>
+        <button class="btn-icon edit-btn" title="Edit"><i class="fas fa-edit"></i></button>
+        <button class="btn-icon delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+      </td>
+    `;
+    scoresTableBody.prepend(tr);
+    attachRowListeners(tr);
+    renderSubjectScoresChart(); // update chart
+  }
+
+  // escape HTML
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // attach edit + delete listeners for a row
+  function attachRowListeners(tr){
+    const editBtn = tr.querySelector('.edit-btn');
+    const delBtn = tr.querySelector('.delete-btn');
+
+    editBtn.addEventListener('click', async () => {
+      const id = tr.dataset.id;
+      try {
+        const res = await fetch(apiBase);
+        const data = await res.json();
+        if (!data.ok) return alert('Unable to fetch scores');
+        const row = data.scores.find(s => String(s.id) === String(id));
+        if (!row) return alert('Score not found');
+        document.getElementById('subject').value = row.subject;
+        document.getElementById('examType').value = row.exam_type;
+        document.getElementById('score').value = row.score;
+        document.getElementById('maxScore').value = row.max_score;
+        document.getElementById('examDate').value = (new Date(row.exam_date)).toISOString().slice(0,10);
+        document.getElementById('notes').value = row.notes || '';
+        document.getElementById('editingId').value = row.id;
+        scoreFormContainer.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error(err);
+        alert('Error loading score for edit');
+      }
+    });
+
+    delBtn.addEventListener('click', async () => {
+      if (!confirm('Are you sure you want to delete this score?')) return;
+      const id = tr.dataset.id;
+      try {
+        const res = await fetch(apiBase + '/' + id, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.ok) {
+          tr.remove();
+          renderSubjectScoresChart();
+        } else {
+          alert(data.error || 'Delete failed');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Delete failed');
+      }
+    });
+  }
+
+  // Attach listeners to existing rows
+  document.querySelectorAll('#scoresTableBody tr').forEach(tr => attachRowListeners(tr));
+
+  // Submit form
+  addScoreForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const editingId = document.getElementById('editingId').value;
+    const payload = {
+      subject: document.getElementById('subject').value.trim(),
+      exam_type: document.getElementById('examType').value.trim(),
+      score: Number(document.getElementById('score').value),
+      max_score: Number(document.getElementById('maxScore').value),
+      exam_date: document.getElementById('examDate').value,
+      notes: document.getElementById('notes').value.trim()
+    };
+    try {
+      if (editingId) {
+        const res = await fetch(apiBase + '/' + editingId, {
+          method: 'PUT',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!data.ok) return alert(data.error || 'Update failed');
+        const existing = document.querySelector(`#scoresTableBody tr[data-id="${editingId}"]`);
+        if (existing) existing.remove();
+        appendScoreRow(data.score);
+        addScoreForm.reset();
+        document.getElementById('editingId').value = '';
+        scoreFormContainer.style.display = 'none';
+      } else {
+        const res = await fetch(apiBase, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!data.ok) return alert(data.error || 'Save failed');
+        appendScoreRow(data.score);
+        addScoreForm.reset();
+        scoreFormContainer.style.display = 'none';
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Save failed');
+    }
+  });
+
+  // Search & Filter
+  function filterScores() {
+    const searchText = searchInput.value.toLowerCase();
+    const subj = subjectFilter.value;
+    const type = typeFilter.value;
+    document.querySelectorAll('#scoresTableBody tr').forEach(row => {
+      const subjectText = row.cells[0].innerText.toLowerCase();
+      const typeText = row.cells[1].innerText.toLowerCase();
+      const matchSearch = subjectText.includes(searchText) || typeText.includes(searchText);
+      const matchSubject = subj === 'all' || subjectText.includes(subj.toLowerCase());
+      const matchType = type === 'all' || typeText.includes(type.toLowerCase());
+      row.style.display = (matchSearch && matchSubject && matchType) ? '' : 'none';
+    });
+    renderSubjectScoresChart(); // update chart after filtering
+  }
+  searchInput.addEventListener('input', filterScores);
+  subjectFilter.addEventListener('change', filterScores);
+  typeFilter.addEventListener('change', filterScores);
+
+  // Export CSV
+  exportBtn.addEventListener('click', () => {
+    const rows = [];
+    document.querySelectorAll('#scoresTableBody tr').forEach(tr => {
+      const id = tr.dataset.id;
+      const subject = tr.cells[0].innerText.trim();
+      const type = tr.cells[1].innerText.trim();
+      const score = tr.cells[2].innerText.trim();
+      const percentage = tr.cells[3].innerText.trim();
+      const date = tr.cells[4].innerText.trim();
+      const grade = tr.cells[5].innerText.trim();
+      rows.push([id, subject, type, score, percentage, date, grade].join(','));
+    });
+    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'scores_export.csv';
+    a.click();
+  });
+
+  // Import modal
+  importBtn.addEventListener('click', () => importModal.style.display = 'block');
+  closeModalBtns.forEach(btn => btn.addEventListener('click', () => importModal.style.display = 'none'));
+  window.addEventListener('click', e => { if (e.target === importModal) importModal.style.display = 'none'; });
+
+  // Import CSV
+  importDataBtn.addEventListener('click', async () => {
+    const fileInput = document.getElementById('csvFile');
+    if (!fileInput.files.length) return alert('Choose a CSV file first');
+    const file = fileInput.files[0];
+    const text = await file.text();
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const promiseBatch = [];
+    for (const ln of lines) {
+      const cols = ln.split(',').map(c => c.trim());
+      if (cols.length < 5) continue;
+      const payload = {
+        subject: cols[0],
+        exam_type: cols[1],
+        score: Number(cols[2]),
+        max_score: Number(cols[3]),
+        exam_date: cols[4],
+        notes: cols[5] || ''
+      };
+      promiseBatch.push(fetch(apiBase, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      }).then(r => r.json()));
+    }
+    try {
+      const results = await Promise.all(promiseBatch);
+      let added = 0;
+      results.forEach(r => { if (r.ok) { appendScoreRow(r.score); added++; } });
+      alert(`Imported ${added} records`);
+      importModal.style.display = 'none';
+      document.getElementById('csvFile').value = '';
+    } catch (err) {
+      console.error(err);
+      alert('Import failed');
+    }
+  });
+
+  // Initial chart render
+  window.addEventListener('DOMContentLoaded', renderSubjectScoresChart);
+
+  // Expose for debugging
+  window.EduTrack = { renderSubjectScoresChart };
+
+})();
+</script>
+
+
+</body>
+</html>

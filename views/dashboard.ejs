@@ -1,0 +1,256 @@
+<!-- views/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EduTrack</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+      import { attachLogout } from '/public/form.js';
+      window.addEventListener('DOMContentLoaded', () => attachLogout('logoutBtn'));
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="/pages/index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link active">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/scores" class="nav-link">Scores</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/pages/analytics.html" class="nav-link">Analytics</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/pages/goals.html" class="nav-link">Goals</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/pages/reports.html" class="nav-link">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/pages/about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <button id="logoutBtn" class="btn small">Logout</button>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="container">
+            <div class="dashboard-welcome">
+                <h1>Welcome back, <%= student?.full_name || student?.email || "Student" %> 👋</h1>
+                <p>Here’s your academic performance overview</p>
+            </div>
+            <div class="dashboard-date">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="current-date"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-content">
+        <div class="container">
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-value"><%= student?.gpa || "85.5%" %></div>
+                        <div class="stat-label">Overall GPA</div>
+                        <div class="stat-change positive"><i class="fas fa-arrow-up"></i> +2.3%</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-book"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-value"><%= student?.subjects?.length || 12 %></div>
+                        <div class="stat-label">Active Subjects</div>
+                        <div class="stat-change neutral"><i class="fas fa-minus"></i> 0%</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-value"><%= student?.weekly_study_time || "24h" %></div>
+                        <div class="stat-label">Study Time This Week</div>
+                        <div class="stat-change positive"><i class="fas fa-arrow-up"></i> +15%</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-value"><%= student?.completed_goals || 8 %></div>
+                        <div class="stat-label">Goals Completed</div>
+                        <div class="stat-change positive"><i class="fas fa-arrow-up"></i> +2</div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- Subject Performance -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Subject Performance</h3>
+                        <a href="/pages/scores.html" class="view-all">View All</a>
+                    </div>
+                    <div class="card-content">
+                        <div class="subject-list">
+                            <% (student?.subjects || [
+                                { name: "Mathematics", score: 92 },
+                                { name: "Physics", score: 88 },
+                                { name: "Chemistry", score: 85 },
+                                { name: "English", score: 78 }
+                            ]).forEach(sub => { %>
+                                <div class="subject-item">
+                                    <div class="subject-info">
+                                        <div class="subject-name"><%= sub.name %></div>
+                                        <div class="subject-score"><%= sub.score %>%</div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: <%= sub.score %>%"></div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="dashboard-card">
+                    <div class="card-header"><h3>Upcoming Events</h3><i class="fas fa-bell"></i></div>
+                    <div class="card-content">
+                        <div class="event-list">
+                            <% (student?.events || [
+                                { day: "15", month: "Dec", title: "Mathematics Exam", time: "9:00 AM - 12:00 PM" },
+                                { day: "18", month: "Dec", title: "Physics Assignment Due", time: "11:59 PM" },
+                                { day: "22", month: "Dec", title: "Chemistry Lab Report", time: "2:00 PM" }
+                            ]).forEach(event => { %>
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <div class="event-day"><%= event.day %></div>
+                                        <div class="event-month"><%= event.month %></div>
+                                    </div>
+                                    <div class="event-info">
+                                        <div class="event-title"><%= event.title %></div>
+                                        <div class="event-time"><%= event.time %></div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Recommendations -->
+                <div class="dashboard-card">
+                    <div class="card-header"><h3>AI Recommendations</h3><i class="fas fa-robot"></i></div>
+                    <div class="card-content">
+                        <div class="recommendation-list">
+                            <% (student?.recommendations || [
+                                { icon: "fa-exclamation-triangle", text: "<strong>Focus on English:</strong> Your performance dropped by 8% this month." },
+                                { icon: "fa-lightbulb", text: "<strong>Study Strategy:</strong> Best time to study is 7-9 PM." },
+                                { icon: "fa-star", text: "<strong>Strength:</strong> Excellent progress in Mathematics!" }
+                            ]).forEach(r => { %>
+                                <div class="recommendation-item">
+                                    <div class="recommendation-icon"><i class="fas <%= r.icon %>"></i></div>
+                                    <div class="recommendation-text"><%- r.text %></div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <div class="card-header"><h3>Quick Actions</h3></div>
+                    <div class="card-content">
+                        <div class="action-buttons">
+                            <a href="/pages/scores.html" class="action-btn"><i class="fas fa-plus"></i> Add New Score</a>
+                            <a href="/pages/goals.html" class="action-btn"><i class="fas fa-bullseye"></i> Set New Goal</a>
+                            <a href="/pages/reports.html" class="action-btn"><i class="fas fa-file-download"></i> Generate Report</a>
+                            <a href="/pages/analytics.html" class="action-btn"><i class="fas fa-chart-bar"></i> View Analytics</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+     <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Want to know which and how many classes u attended?</h2>
+                <p>The Attendance Tracker helps students monitor their class participation throughout the week. By keeping a clear record of attended and missed lectures, students can stay consistent and identify areas where improvement is needed. Regular attendance ensures better academic performance and discipline.</p>
+                <a href="/pages/attendace.html" class="btn btn-primary">Attendance Data</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>EduTrack</span>
+                    </div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/pages/scores.html">Scores</a></li>
+                        <li><a href="/pages/analytics.html">Analytics</a></li>
+                        <li><a href="/pages/goals.html">Goals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/public/main.js"></script>
+    <script src="/public/dashboard.js"></script>
+</body>
+</html>

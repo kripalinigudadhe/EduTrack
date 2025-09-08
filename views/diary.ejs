@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Academic Diary - EduTrack</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Attractive Diary Form Styling */
+        .diary-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .diary-form .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        .diary-form input, 
+        .diary-form textarea {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s ease;
+            background: #fafafa;
+        }
+        .diary-form input:focus,
+        .diary-form textarea:focus {
+            border-color: #7f4ad3;
+            background: #fff;
+            box-shadow: 0 0 8px rgba(127, 74, 211, 0.3);
+        }
+        .diary-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .diary-form button {
+            align-self: flex-start;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #7f4ad3, #9b59b6);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .diary-form button:hover {
+            background: linear-gradient(45deg, #9b59b6, #7f4ad3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(127, 74, 211, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduTrack</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="/pages/index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+                <li class="nav-item"><a href="/scores" class="nav-link">Scores</a></li>
+                <li class="nav-item"><a href="/pages/analytics.html" class="nav-link">Analytics</a></li>
+                <li class="nav-item"><a href="/pages/goals.html" class="nav-link">Goals</a></li>
+                <li class="nav-item"><a href="/pages/reports.html" class="nav-link">Reports</a></li>
+                <li class="nav-item"><a href="/pages/about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/pages//login" class="nav-link">Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Daily Academic Diary</h1>
+            <p>Keep track of your daily academic activities, notes, and tasks</p>
+        </div>
+        <div class="hero-image">
+            <div class="hero-graphic">
+                <i class="fas fa-book"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diary Content -->
+    <section class="analytics-content">
+        <div class="container">
+            <!-- Add New Entry Form -->
+            <div class="analytics-card large-card">
+                <div class="card-header">
+                    <h3>Add New Diary Entry</h3>
+                </div>
+                <div class="card-content">
+                    <form action="/diary" method="POST" class="diary-form">
+                        <div class="form-row">
+                            <input type="date" name="date" required>
+                            <input type="text" name="title" placeholder="Entry Title" required>
+                        </div>
+                        <textarea name="description" placeholder="Write your academic notes here..." required></textarea>
+                        <button type="submit"><i class="fas fa-plus-circle"></i> Add Entry</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Display Entries -->
+            <div class="analytics-card" margin-top="40 px">
+                <div class="card-header">
+                    <h3>Your Diary Entries</h3>
+                </div>
+                <div class="card-content">
+                    <% if(diaryEntries.length === 0) { %>
+                        <p>No diary entries yet!</p>
+                    <% } else { %>
+                        <% diaryEntries.forEach(entry => { %>
+                            <div class="diary-entry" style="background:#f1e8ff; border:1px solid #e0ccff; border-radius:15px; padding:20px; margin-bottom:20px;">
+                                <h4 style="color:#7f4ad3; margin:0 0 10px;">
+                                    <%= entry.title %> (<%= entry.date.toISOString().split('T')[0] %>)
+                                </h4>
+                                <p><%= entry.description %></p>
+                                <form action="/diary/delete/<%= entry.id %>" method="POST" style="display:inline;">
+                                    <button type="submit" class="delete-btn" style="background:#e74c3c; color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                                <button class="edit-btn" onclick="editEntry(<%= entry.id %>, '<%= entry.title %>', '<%= entry.description %>', '<%= entry.date.toISOString().split('T')[0] %>')" 
+                                    style="background:#f39c12; color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Academic Assistant</span>
+                    </div>
+                    <p>Empowering students to achieve academic excellence through data-driven insights and personalized guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/scores">Scores</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                        <li><a href="goals.html">Goals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduTrack. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function editEntry(id, title, description, date) {
+            const formHtml = `
+                <form action="/diary/update/${id}" method="POST" class="diary-form" style="margin-bottom:20px;">
+                    <div class="form-row">
+                        <input type="date" name="date" value="${date}" required>
+                        <input type="text" name="title" value="${title}" required>
+                    </div>
+                    <textarea name="description" required>${description}</textarea>
+                    <button type="submit"><i class="fas fa-save"></i> Update Entry</button>
+                </form>
+            `;
+            const entryDiv = document.createElement('div');
+            entryDiv.classList.add('analytics-card');
+            entryDiv.innerHTML = formHtml;
+            document.querySelector('.analytics-content .container').prepend(entryDiv);
+        }
+    </script>
+</body>
+</html>

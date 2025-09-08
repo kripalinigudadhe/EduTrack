@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goals - EduTrack</title>
+  <!-- Correct CSS path -->
+  <link rel="stylesheet" href="/public/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EduTrack</span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        <li class="nav-item"><a href="/scores" class="nav-link">Scores</a></li>
+        <li class="nav-item"><a href="/analytics" class="nav-link">Analytics</a></li>
+        <li class="nav-item"><a href="/goals" class="nav-link active">Goals</a></li>
+        <li class="nav-item"><a href="/week_report" class="nav-link">Reports</a></li>
+        <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Academic Goals</h1>
+      <p>Set, track, and achieve your academic objectives</p>
+    </div>
+    <div class="hero-image">
+      <div class="hero-graphic"><i class="fas fa-bullseye"></i></div>
+    </div>
+  </section>
+
+  <section class="goals-content">
+    <div class="container">
+
+      <!-- Overview Section -->
+      <div class="goals-overview">
+        <div class="overview-card">
+          <div class="overview-icon"><i class="fas fa-bullseye"></i></div>
+          <div class="overview-info">
+            <div class="overview-number"><%= goals.length %></div>
+            <div class="overview-label">Total Goals</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon"><i class="fas fa-check-circle"></i></div>
+          <div class="overview-info">
+            <div class="overview-number"><%= goals.filter(g => g.status === 'completed').length %></div>
+            <div class="overview-label">Completed</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon"><i class="fas fa-clock"></i></div>
+          <div class="overview-info">
+            <div class="overview-number"><%= goals.filter(g => g.status === 'active').length %></div>
+            <div class="overview-label">In Progress</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon"><i class="fas fa-percentage"></i></div>
+          <div class="overview-info">
+            <% 
+              const total = goals.length || 1;
+              const success = goals.filter(g => g.status === 'completed').length;
+              const percent = Math.round((success / total) * 100);
+            %>
+            <div class="overview-number"><%= percent %>%</div>
+            <div class="overview-label">Success Rate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Goal Form -->
+      <div class="goal-form-container">
+        <h2>Add New Goal</h2>
+        <form action="/goals/add" method="POST" class="goal-form">
+          <label>Title:</label>
+          <input type="text" name="title" required>
+          
+          <label>Description:</label>
+          <textarea name="description"></textarea>
+          
+          <label>Category:</label>
+          <input type="text" name="category">
+
+          <label>Subject:</label>
+          <input type="text" name="subject">
+
+          <label>Deadline:</label>
+          <input type="date" name="deadline" required>
+
+          <label>Priority:</label>
+          <select name="priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+
+          <button type="submit" class="btn">Add Goal</button>
+        </form>
+      </div>
+
+      <!-- Goals List -->
+      <div class="goals-list">
+        <% if (goals.length === 0) { %>
+          <p>No goals added yet. Create one to get started!</p>
+        <% } else { %>
+          <% goals.forEach(goal => { %>
+            <div class="goal-card" data-status="<%= goal.status %>">
+              <h3><%= goal.title %></h3>
+              <p><%= goal.description || '' %></p>
+              <p><b>Category:</b> <%= goal.category %></p>
+              <p><b>Subject:</b> <%= goal.subject || 'All' %></p>
+              <p><b>Deadline:</b> <%= goal.deadline.toISOString().slice(0,10) %></p>
+              <p><b>Priority:</b> <%= goal.priority %></p>
+              
+              <!-- Progress Bar -->
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:<%= goal.progress %>%"></div>
+              </div>
+              <p class="progress-percentage"><%= goal.progress %>%</p>
+
+              <!-- Update Progress -->
+              <form action="/goals/<%= goal.id %>/update" method="POST" class="update-progress-form">
+                <input type="number" name="progress" min="0" max="100" value="<%= goal.progress %>" required>
+                <select name="status">
+                  <option value="active" <%= goal.status === 'active' ? 'selected' : '' %>>Active</option>
+                  <option value="completed" <%= goal.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                  <option value="pending" <%= goal.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                </select>
+                <button type="submit" class="btn-small">Update</button>
+              </form>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo"><i class="fas fa-graduation-cap"></i><span>EduTrack</span></div>
+          <p>Empowering students to achieve academic excellence.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="nav-menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/scores">Scores</a></li>
+            <li><a href="/analytics">Analytics</a></li>
+            <li><a href="/goals">Goals</a></li>
+            <li><a href="/week_report">Reports</a></li>
+            <li><a href="/about">About</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2025 EduTrack. All rights reserved.</p></div>
+    </div>
+  </footer>
+</body>
+</html>
