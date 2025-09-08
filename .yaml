@@ -6,8 +6,8 @@ services:
     buildCommand: "npm install"
     startCommand: "node server.js"
     envVars:
-      - key: GROQ_API_KEY
+      - key: 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
         sync: false
-      - key: DATABASE_PASSWORD
+      - key: kpg123
         sync: false
 
