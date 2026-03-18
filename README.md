@@ -5,7 +5,7 @@ EduTrack is a **student guide assistant** built using **HTML, CSS, JavaScript, N
 It is designed to help students manage academic tasks, get guidance, and stay organized through an interactive assistant interface.
 
  🚀 Features
-* ✅ Interactive student guide powered by **Groq API**
+* ✅ Interactive student guide powered by *Groq API*
 * ✅ Task and schedule management for students
 * ✅ User-friendly **frontend (HTML, CSS, JS)**
 * ✅ **Backend with Node.js & Express**
